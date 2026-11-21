@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Umrah Trip Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--g:#0b5d47;--g2:#0e7a5d;--gl:#e6f2ee;--gold:#b88a2e;--ink:#1c2421;--mut:#66726d;--line:#dfe5e2;--bg:#f5f7f6;--card:#fff;--red:#b42318;--redl:#fdecea;--amb:#a15c07;--ambl:#fef4e2;--blu:#1d4ed8;--blul:#e8eefc;--r:12px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 "Plus Jakarta Sans",system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{margin:0 0 .4em;line-height:1.2}h1{font-size:1.35rem}h2{font-size:1.12rem}h3{font-size:1rem}
+a{color:var(--g2)}
+.top{position:sticky;top:0;z-index:20;background:var(--g);color:#fff;display:flex;align-items:center;gap:12px;padding:10px 16px}
+.top .brand{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:8px}
+.top .brand i{display:inline-block;width:26px;height:26px;border-radius:7px;background:var(--gold);position:relative}
+.top .brand i:after{content:"";position:absolute;inset:7px;border:2px solid #fff;border-radius:2px}
+.top .sp{flex:1}.top .who{font-size:.82rem;opacity:.9;text-align:right}
+.top .btn{background:rgba(255,255,255,.14);color:#fff;border-color:transparent}
+.layout{display:flex;min-height:calc(100vh - 52px)}
+nav.side{width:210px;flex:none;background:#fff;border-right:1px solid var(--line);padding:12px 8px}
+nav.side a{display:block;padding:9px 12px;border-radius:9px;color:var(--ink);text-decoration:none;font-weight:500;cursor:pointer}
+nav.side a.on{background:var(--gl);color:var(--g)}
+main{flex:1;min-width:0;padding:18px;max-width:1100px}
+@media(max-width:860px){.layout{display:block}nav.side{width:auto;display:flex;overflow-x:auto;gap:4px;border-right:0;border-bottom:1px solid var(--line);padding:6px 8px;position:sticky;top:52px;z-index:15}nav.side a{white-space:nowrap;padding:7px 12px}main{padding:12px}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.card.tight{padding:12px}
+.grid{display:grid;gap:12px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:700px){.g2,.g3,.g4{grid-template-columns:1fr}.g4.keep{grid-template-columns:repeat(2,1fr)}}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}
+.mut{color:var(--mut)}.sm{font-size:.84rem}.b{font-weight:600}.r{text-align:right}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:.84rem;color:var(--mut);font-weight:500}
+.fld input,.fld select,.fld textarea,input.in,select.in{border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:#fff;color:var(--ink);font-size:.95rem;width:100%;min-width:0}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:2px solid var(--g2);outline-offset:-1px;border-color:transparent}
+.fld input:disabled{background:#f1f3f2}
+.chk{display:flex;gap:8px;align-items:center;font-size:.92rem;cursor:pointer}
+.btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 14px;cursor:pointer;font-weight:600;font-size:.9rem;white-space:nowrap}
+.btn:hover{border-color:var(--g2)}
+.btn.p{background:var(--g);border-color:var(--g);color:#fff}.btn.p:hover{background:var(--g2)}
+.btn.d{color:var(--red)}.btn.d.p{background:var(--red);border-color:var(--red);color:#fff}
+.btn.s{padding:5px 10px;font-size:.8rem}.btn.l{padding:12px 18px;font-size:1rem;width:100%}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.chip{display:inline-block;padding:2px 9px;border-radius:99px;font-size:.76rem;font-weight:600;background:#eef1f0;color:#46524d;white-space:nowrap}
+.chip.green{background:var(--gl);color:var(--g)}.chip.red{background:var(--redl);color:var(--red)}.chip.amber{background:var(--ambl);color:var(--amb)}.chip.blue{background:var(--blul);color:var(--blu)}.chip.teal{background:#e3f4f6;color:#0b6672}.chip.gold{background:#f7eedc;color:#7d5b16}
+.stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px}.stat .v{font-size:1.25rem;font-weight:700}.stat .k{font-size:.76rem;color:var(--mut)}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{padding:8px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:.75rem;text-transform:uppercase;letter-spacing:.4px;color:var(--mut);font-weight:600;background:#fafbfb}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:#fff}
+.tw table th:first-child,.tw table td:first-child{padding-left:12px}
+tr.click{cursor:pointer}tr.click:hover td{background:#f7faf9}
+.issues{background:var(--redl);border:1px solid #f5c2bd;color:#7a1a12;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:.88rem}
+.issues ul{margin:4px 0 0;padding-left:18px}
+.ok{background:var(--gl);border:1px solid #bfdcd1;color:var(--g);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:.88rem}
+.note{background:var(--ambl);border:1px solid #f3d9a8;color:#6b3d04;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:.86rem}
+.pax{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px;background:#fff}
+.doclist{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.doc{border:1px dashed #b8c4bf;border-radius:8px;padding:5px 9px;font-size:.8rem;background:#fafcfb;cursor:pointer}
+.doc.miss{border-color:#efb3ac;color:var(--red);cursor:default;background:#fff}
+.upl{border:1px dashed #b8c4bf;border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px;font-size:.84rem;background:#fafcfb}
+.upl.has{border-style:solid;border-color:#bfdcd1;background:var(--gl)}
+.upl input[type=file]{font-size:.8rem;max-width:100%}
+.tabs{display:flex;gap:4px;overflow-x:auto;margin-bottom:12px;border-bottom:1px solid var(--line)}
+.tabs a{padding:8px 12px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;font-weight:500;color:var(--mut)}
+.tabs a.on{border-color:var(--g);color:var(--g)}
+.ov{position:fixed;inset:0;background:rgba(15,25,20,.45);z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:4vh 12px;overflow-y:auto}
+.ov .box{background:#fff;border-radius:14px;width:100%;max-width:720px;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.ov .box.sm{max-width:440px}
+.ov .box img{max-width:100%;border-radius:8px}
+#dialog .ov{z-index:60}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:80;display:flex;flex-direction:column;gap:6px;align-items:center}
+#toast div{background:#1c2421;color:#fff;padding:10px 16px;border-radius:10px;font-size:.88rem;box-shadow:0 6px 20px rgba(0,0,0,.2);max-width:90vw}
+#toast div.err{background:var(--red)}
+.login{max-width:430px;margin:5vh auto;padding:0 12px}
+.login .hero{text-align:center;margin-bottom:18px}
+.login .hero .m{width:56px;height:56px;border-radius:14px;background:var(--g);margin:0 auto 10px;position:relative}
+.login .hero .m:after{content:"";position:absolute;inset:15px;border:3px solid var(--gold);border-radius:3px}
+.seg{display:flex;background:#e9eeec;border-radius:10px;padding:3px;margin-bottom:14px}
+.seg a{flex:1;text-align:center;padding:8px;border-radius:8px;cursor:pointer;font-weight:600;color:var(--mut)}
+.seg a.on{background:#fff;color:var(--g);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.banner{background:#fff7e6;color:#6b3d04;border-bottom:1px solid #f3d9a8;padding:7px 16px;font-size:.84rem}
+.leg{display:grid;grid-template-columns:1.1fr 1fr 1fr 1.4fr 1.4fr auto;gap:8px;align-items:end;margin-bottom:8px}
+@media(max-width:860px){.leg{grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:10px;padding:10px}}
+.hist{font-size:.82rem;border-left:2px solid var(--line);padding-left:12px;margin-left:4px}
+.hist div{margin-bottom:6px}
+.money td:last-child,.money th:last-child{text-align:right;white-space:nowrap}
+.tot td{font-weight:700;background:#fafbfb}
+.empty{text-align:center;color:var(--mut);padding:30px 10px}
+.hide{display:none!important}
+.trip-h{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:.88rem}.kv span:nth-child(odd){color:var(--mut)}
+.bar{height:7px;background:#e9eeec;border-radius:9px;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--g2)}
+.stick{position:sticky;bottom:0;background:linear-gradient(transparent,var(--bg) 30%);padding:14px 0 6px;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="modal"></div>
+<div id="dialog"></div>
+<div id="toast"></div>
+<div id="busy" style="display:none;position:fixed;top:0;left:0;right:0;height:3px;background:var(--gold);z-index:90"></div>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+"use strict";
+/* ================= CONFIG ================= */
+const CFG = window.APP_CONFIG || {};
+const DEFAULT_SETTINGS = {orgName:"Umrah Trips", currency:"OMR", otpMode:"off", infantMaxAge:1, childMaxAge:5, passportMonths:6, residenceMonths:3, pilgrimDomain: CFG.PILGRIM_EMAIL_DOMAIN || "pilgrims.umrah.app"};
+const DEFAULT_VISA = [
+  {id:"HAS_MULTI", name:"Already has multi-entry visa", needsCopy:true},
+  {id:"NEED_MULTI", name:"Needs multi-entry visa"},
+  {id:"NEED_UMRAH", name:"Needs Umrah visa (single entry)"}];
+const MASTER_KEYS = [
+  {key:"regions", label:"Regions", fields:[["name","Name"]]},
+  {key:"divisions", label:"Divisions", parent:"regions", fields:[["name","Name"]]},
+  {key:"units", label:"Units", parent:"divisions", fields:[["name","Name"]]},
+  {key:"hotels", label:"Hotels", fields:[["name","Name"],["city","City","city"],["distance","Distance to Haram"],["contact","Contact"]]},
+  {key:"food", label:"Food suppliers", fields:[["name","Name"],["city","City","city"],["plan","Meal plan"],["contact","Contact"]]},
+  {key:"transport", label:"Transport", fields:[["name","Name"],["kind","Type","kind"],["contact","Contact"]]},
+  {key:"roomTypes", label:"Room types", fields:[["name","Name"],["capacity","Beds","num"]]}];
+const ROLES = {super:"Super Admin", admin:"Trip Admin / Approver", finance:"Finance", ameer:"Ameer"};
+const BSTATUS = {enquiry:["New request","gold"], details:["Details requested","amber"], draft:["Draft","grey"], submitted:["Submitted","blue"], review:["Under review","blue"], correction:["Needs correction","amber"], approved:["Approved","green"], confirmed:["Confirmed (paid)","green"], travelled:["Travelled","teal"], rejected:["Rejected","red"], cancelled:["Cancelled","red"]};
+const ACTIVE = ["submitted","review","correction","approved","confirmed","travelled"];
+const PIPE = ["enquiry","details"];
+const reqText = r => r ? [r.adults ? r.adults + " adult" + (r.adults>1?"s":"") : "", r.children ? r.children + " child" + (r.children>1?"ren":"") : "", r.infants ? r.infants + " infant" + (r.infants>1?"s":"") : ""].filter(Boolean).join(", ") : "";
+const TSTATUS = {draft:["Draft","grey"], open:["Registration open","green"], closed:["Registration closed","amber"], ongoing:["Ongoing","blue"], completed:["Completed","teal"], cancelled:["Cancelled","red"]};
+const DOCS = [["passportFront","Passport – front"],["passportBack","Passport – back"],["residenceFront","Residence card – front"],["residenceBack","Residence card – back"],["visa","Visa page / copy"]];
+const RELS = ["Self","Spouse","Son","Daughter","Father","Mother","Brother","Sister","Father-in-law","Mother-in-law","Grandchild","Relative","Friend","Other"];
+const CITIES = ["Makkah","Madinah"];
+
+/* ================= UTIL ================= */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid = p => p + "-" + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const clone = o => o == null ? o : JSON.parse(JSON.stringify(o));
+const nowISO = () => new Date().toISOString();
+const iso = d => d.toISOString().slice(0,10);
+const today = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10); };
+const parseD = s => { const [y,m,d] = s.split("-").map(Number); return new Date(Date.UTC(y,m-1,d)); };
+const fmtD = s => s ? parseD(s).toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric",timeZone:"UTC"}) : "—";
+const fmtDT = s => s ? new Date(s).toLocaleString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
+const addDays = (s,n) => { const d = parseD(s); d.setUTCDate(d.getUTCDate()+n); return iso(d); };
+const addMonths = (s,n) => { const d = parseD(s), day = d.getUTCDate(); d.setUTCDate(1); d.setUTCMonth(d.getUTCMonth()+n); const last = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth()+1, 0)).getUTCDate(); d.setUTCDate(Math.min(day,last)); return iso(d); };
+const daysBetween = (a,b) => Math.round((parseD(b)-parseD(a))/86400000);
+function ageOn(dob, ref){ const a = parseD(dob), r = parseD(ref); let y = r.getUTCFullYear()-a.getUTCFullYear(); if (r.getUTCMonth()<a.getUTCMonth() || (r.getUTCMonth()===a.getUTCMonth() && r.getUTCDate()<a.getUTCDate())) y--; return y; }
+const num = v => Number(v) || 0;
+const fv = (form, n) => { const el = form.elements.namedItem(n); return el ? el.value : ""; };
+const money = n => `${settings().currency} ${num(n).toFixed(3)}`;
+const normMobile = m => { let d = String(m||"").replace(/\D/g,""); if (d.length === 8) d = "968" + d; return d; };
+const showMobile = m => m ? "+" + m : "—";
+function setPath(obj, path, val){ const ks = path.split("."); let o = obj; for (let i=0;i<ks.length-1;i++){ const k = ks[i]; if (o[k] == null || typeof o[k] !== "object") o[k] = /^\d+$/.test(ks[i+1]) ? [] : {}; o = o[k]; } o[ks[ks.length-1]] = val; }
+async function hashPin(mobile, pin){ const data = new TextEncoder().encode("umra:" + mobile + ":" + pin); const buf = await crypto.subtle.digest("SHA-256", data); return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join(""); }
+function toast(msg, kind){ const el = document.createElement("div"); if (kind) el.className = kind; el.textContent = msg; $("#toast").appendChild(el); setTimeout(()=>el.remove(), kind==="err" ? 5000 : 2600); }
+function csvCell(v){ v = String(v ?? ""); return /[",\n]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v; }
+
+/* ================= STORE (Supabase) ================= */
+
+const sb = (window.supabase && CFG.SUPABASE_URL && CFG.SUPABASE_ANON_KEY) ? window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY) : null;
+const DB = {loaded:false, error:"", user:null, staffId:null, seats:{}, hist:{},
+  data:{app:{settings:{}, masters:{}}, trips:{}, profiles:{}, accounts:{}, bookings:{}, staff:{}}};
+const nul = v => (v === "" || v === undefined) ? null : v;
+async function q(p){ const {data, error} = await p; if (error) throw new Error(error.message); return data; }
+async function fetchAll(table, order){
+  let out = [], from = 0;
+  for (;;){
+    let qb = sb.from(table).select("*").range(from, from + 999);
+    if (order) qb = qb.order(order);
+    const data = await q(qb); out = out.concat(data || []);
+    if (!data || data.length < 1000) break; from += 1000;
+  }
+  return out;
+}
+async function loadAll(){
+  const staff = !!DB.staffId, authed = !!DB.user;
+  const T = {settings:fetchAll("settings"), regions:fetchAll("regions","name"), divisions:fetchAll("divisions","name"), units:fetchAll("units","name"),
+    hotels:fetchAll("hotels","name"), food:fetchAll("food_suppliers","name"), transport:fetchAll("transport_providers","name"), roomTypes:fetchAll("room_types","name"),
+    trips:fetchAll("trips"), legs:fetchAll("trip_legs","seq"), staff: staff ? fetchAll("staff","name") : fetchAll("staff_public","name")};
+  if (authed) Object.assign(T, {persons:fetchAll("persons"), docs:fetchAll("person_documents"), accounts:fetchAll("accounts"), links:fetchAll("account_persons"),
+    bookings:fetchAll("bookings"), pax:fetchAll("booking_passengers","sort"), charges:fetchAll("charges","created_at"), payments:fetchAll("payments","created_at"),
+    reqs:fetchAll("room_requests","created_at"), seats:q(sb.rpc("trip_seats"))});
+  const keys = Object.keys(T), vals = await Promise.all(Object.values(T)), R = {};
+  keys.forEach((k,i) => R[k] = vals[i] || []);
+  const d = {app:{settings:{}, masters:{}}, trips:{}, profiles:{}, accounts:{}, bookings:{}, staff:{}};
+  const s = R.settings[0];
+  if (s) d.app.settings = {orgName:s.org_name, currency:s.currency, otpMode:s.otp_mode, infantMaxAge:s.infant_max_age, childMaxAge:s.child_max_age, passportMonths:s.passport_months, residenceMonths:s.residence_months, pilgrimDomain:s.pilgrim_email_domain};
+  d.app.masters = {
+    regions: R.regions.map(x => ({id:x.id, name:x.name})),
+    divisions: R.divisions.map(x => ({id:x.id, name:x.name, parentId:x.region_id})),
+    units: R.units.map(x => ({id:x.id, name:x.name, parentId:x.division_id})),
+    hotels: R.hotels.map(x => ({id:x.id, name:x.name, city:x.city, distance:x.distance, contact:x.contact})),
+    food: R.food.map(x => ({id:x.id, name:x.name, city:x.city, plan:x.meal_plan, contact:x.contact})),
+    transport: R.transport.map(x => ({id:x.id, name:x.name, kind:x.kind, contact:x.contact})),
+    roomTypes: R.roomTypes.map(x => ({id:x.id, name:x.name, capacity:x.capacity}))};
+  R.trips.forEach(t => d.trips[t.id] = {code:t.code, title:t.title, mode:t.mode, transportId:t.transport_id, departure:t.departure, ameerId:t.ameer_id,
+    startDate:t.start_date, endDate:t.end_date, regOpen:t.reg_open, regClose:t.reg_close, maxSeats:t.max_seats, status:t.status,
+    fares:{adult:num(t.adult_fare), child:num(t.child_fare), infant:num(t.infant_fare)}, visaFees:t.visa_fees || {}, roomRates:t.room_rates || {}, notes:t.notes, legs:[]});
+  R.legs.forEach(l => { if (d.trips[l.trip_id]) d.trips[l.trip_id].legs.push({city:l.city, checkIn:l.check_in, checkOut:l.check_out, hotelId:l.hotel_id, foodId:l.food_id}); });
+  R.staff.forEach(x => d.staff[x.id] = {name:x.name, email:x.email, mobile:x.mobile, role:x.role, active:x.active !== false, userId:x.user_id});
+  (R.persons||[]).forEach(p => d.profiles[p.id] = {name:p.name, gender:p.gender, dob:p.dob, nationality:p.nationality, passportNo:p.passport_no, passportPlace:p.passport_place,
+    passportIssue:p.passport_issue, passportExpiry:p.passport_expiry, onVisitVisa:p.on_visit_visa, residenceNo:p.residence_no, residenceExpiry:p.residence_expiry,
+    regionId:p.region_id, divisionId:p.division_id, unitId:p.unit_id, mobile:p.mobile, emergency:p.emergency, docs:{}, docStatus:{}});
+  (R.docs||[]).forEach(x => { const p = d.profiles[x.person_id]; if (!p) return; p.docs[x.doc_type] = {path:x.storage_path, name:x.file_name, type:x.content_type}; p.docStatus[x.doc_type] = x.status; });
+  (R.accounts||[]).forEach(a => d.accounts[a.mobile] = {mobile:a.mobile, ownProfileId:a.own_person_id, companions:[]});
+  (R.links||[]).forEach(l => { const a = d.accounts[l.account_mobile]; if (a) a.companions.push({profileId:l.person_id, relationship:l.relationship}); });
+  (R.bookings||[]).forEach(b => d.bookings[b.id] = {tripId:b.trip_id, accountMobile:b.account_mobile, leadName:b.lead_name, type:b.type, status:b.status,
+    requested:{adults:b.req_adults, children:b.req_children, infants:b.req_infants}, remarks:b.remarks, remark:b.office_remark,
+    submittedAt:b.submitted_at, createdAt:b.created_at, approvedBy:b.approved_by, passengers:[], charges:[], payments:[], requests:[], history: DB.hist[b.id] || []});
+  (R.pax||[]).forEach(x => { const b = d.bookings[x.booking_id]; if (b) b.passengers.push({rowId:x.id, profileId:x.person_id, relationship:x.relationship, visaType:x.visa_type || "",
+    seatRequired:x.seat_required, fareOverride: x.fare_override == null ? undefined : num(x.fare_override), visaOverride: x.visa_override == null ? undefined : num(x.visa_override), fareNote:x.fare_note}); });
+  (R.charges||[]).forEach(c => { const b = d.bookings[c.booking_id]; if (b) b.charges.push({id:c.id, type:c.type, stage:c.stage, settle:c.settle, city:c.city, roomTypeId:c.room_type_id,
+    nights:c.nights, amount:num(c.amount), label:c.label, note:c.note, by:c.created_by, at:c.created_at}); });
+  (R.payments||[]).forEach(p => { const b = d.bookings[p.booking_id]; if (b) b.payments.push({id:p.id, stage:p.stage, amount:num(p.amount), method:p.method, date:p.paid_on, ref:p.reference,
+    receipt: p.receipt_path ? {path:p.receipt_path, name:p.receipt_name, type:p.receipt_type} : null, status:p.status, reason:p.reason, by:p.created_by, at:p.created_at, verifiedBy:p.verified_by}); });
+  (R.reqs||[]).forEach(r => { const b = d.bookings[r.booking_id]; if (b) b.requests.push({id:r.id, text:r.text, status:r.status, by:r.created_by, at:r.created_at}); });
+  DB.seats = {}; (R.seats||[]).forEach(x => DB.seats[x.trip_id] = x.used);
+  DB.data = d; DB.loaded = true;
+}
+async function loadHistory(bid){
+  const rows = await q(sb.from("booking_history").select("*").eq("booking_id", bid).order("at"));
+  DB.hist[bid] = rows.map(h => ({at:h.at, by:h.by_name, text:h.text}));
+  if (DB.data.bookings[bid]) DB.data.bookings[bid].history = DB.hist[bid];
+}
+async function refresh(){
+  try { await loadAll(); if (view.name === "booking" && view.id && D().bookings[view.id]) await loadHistory(view.id); }
+  catch(e){ toast("Could not refresh: " + e.message, "err"); }
+  render();
+}
+let busyCount = 0;
+function busy(on){ busyCount += on ? 1 : -1; document.body.style.cursor = busyCount > 0 ? "progress" : ""; const el = $("#busy"); if (el) el.style.display = busyCount > 0 ? "block" : "none"; }
+/** Run a write, show errors from the database in plain words, then reload data. */
+async function save(fn, okMsg){
+  busy(true);
+  try { await fn(); await loadAll(); if (view.name === "booking" && view.id) await loadHistory(view.id).catch(()=>{}); if (okMsg) toast(okMsg); return true; }
+  catch(e){ toast(String(e.message || e).replace(/^.*?Cannot submit: /, "Cannot submit: "), "err"); return false; }
+  finally { busy(false); }
+}
+function onData(){ if (view.isForm && me()) return; render(); }
+/* ================= ACCESSORS ================= */
+const D = () => DB.data;
+const settings = () => ({...DEFAULT_SETTINGS, ...(D().app.settings || {})});
+function masters(){ const m = D().app.masters || {}; const o = {}; MASTER_KEYS.forEach(k => o[k.key] = m[k.key] || []); o.visaTypes = DEFAULT_VISA; return o; }
+const mName = (key, id) => (masters()[key].find(x => x.id === id) || {}).name || "—";
+const visaName = id => (DEFAULT_VISA.find(v => v.id === id) || {}).name || "—";
+const trip = id => { const t = D().trips[id]; return t ? {...t, id} : null; };
+const getBooking = id => { const b = D().bookings[id]; return b ? {...b, id} : null; };
+const allBookings = () => Object.entries(D().bookings).map(([id,b]) => ({...b, id}));
+const bookingsOf = tid => allBookings().filter(b => b.tripId === tid);
+const staffName = id => (D().staff[id] || {}).name || "—";
+function accountPeople(mobile){ const a = D().accounts[mobile]; if (!a) return []; const out = []; if (a.ownProfileId && D().profiles[a.ownProfileId]) out.push({profileId:a.ownProfileId, relationship:"Self"}); (a.companions||[]).forEach(c => { if (D().profiles[c.profileId] && c.profileId !== a.ownProfileId) out.push(c); }); return out; }
+function leadName(b){ const a = D().accounts[b.accountMobile]; const p = a && a.ownProfileId && D().profiles[a.ownProfileId]; return b.leadName || (p && p.name) || (b.passengers && b.passengers[0] && (D().profiles[b.passengers[0].profileId]||{}).name) || showMobile(b.accountMobile); }
+
+/* ================= SESSION / ROLES ================= */
+let session = null;   // {kind:"staff", id} | {kind:"pilgrim", mobile} | {kind:"none"}
+function mobileFromUser(u){
+  if (u.phone) return String(u.phone).replace(/\D/g, "");
+  const e = (u.email || "").toLowerCase(), dom = "@" + String(settings().pilgrimDomain || "").toLowerCase();
+  return e.endsWith(dom) ? e.slice(0, -dom.length) : null;
+}
+async function resolveSession(){
+  const {data} = await sb.auth.getSession(); const s = data && data.session;
+  DB.user = s ? s.user : null; DB.staffId = null; session = null;
+  if (!DB.user) return;
+  const st = await q(sb.from("staff").select("id,active").eq("user_id", DB.user.id).maybeSingle());
+  if (st && st.active){ DB.staffId = st.id; session = {kind:"staff", id:st.id}; return; }
+  const mob = mobileFromUser(DB.user);
+  if (mob){ session = {kind:"pilgrim", mobile:mob}; await sb.from("accounts").upsert({mobile:mob}, {onConflict:"mobile", ignoreDuplicates:true}); }
+  else session = {kind:"none"};
+}
+function me(){
+  if (!session) return null;
+  if (session.kind === "staff"){ const s = D().staff[session.id]; return s && s.active !== false ? {...s, id:session.id, kind:"staff"} : null; }
+  if (session.kind === "pilgrim"){ const a = D().accounts[session.mobile] || {companions:[]}; return {...a, mobile:session.mobile, kind:"pilgrim"}; }
+  return null;
+}
+const role = () => { const m = me(); return m && m.kind === "staff" ? m.role : null; };
+const isStaff = () => !!role();
+const PERM = {trips:["super","admin"], approve:["super","admin"], docs:["super","admin"], masters:["super","admin"], settings:["super"], payments:["super","admin","finance","ameer"], verifyPay:["super","finance"], charges:["super","admin","finance","ameer"], reports:["super","admin","finance","ameer"], pilgrims:["super","admin"], editBooking:["super","admin"], newBooking:["super","admin"], bookings:["super","admin","finance","ameer"]};
+const can = a => { const r = role(); return !!r && (PERM[a] || []).includes(r); };
+function actor(){ const m = me(); if (!m) return "System"; return m.kind === "staff" ? m.name + " (" + ROLES[m.role] + ")" : (leadNameForAccount(m.mobile) || showMobile(m.mobile)); }
+function leadNameForAccount(mobile){ const a = D().accounts[mobile]; return a && a.ownProfileId && D().profiles[a.ownProfileId] ? D().profiles[a.ownProfileId].name : ""; }
+function defaultTripId(){ const up = visibleTrips().filter(t => !["completed","cancelled"].includes(t.status)).sort((a,b) => (a.startDate||"").localeCompare(b.startDate||"")); return (up[0] || visibleTrips()[0] || {}).id || ""; }
+function visibleTrips(){ const all = Object.entries(D().trips).map(([id,t]) => ({...t, id})).sort((a,b) => (b.startDate||"").localeCompare(a.startDate||"")); return role() === "ameer" ? all.filter(t => t.ameerId === session.id) : all; }
+/* ================= RULES ================= */
+function evalPax(p, t, bp){
+  const st = settings(), r = {age:null, cat:"—", issues:[], missing:[]};
+  if (!p){ r.issues.push("Profile missing"); return r; }
+  if (!t || !t.startDate) return r;
+  const ref = addDays(t.startDate, 1);
+  if (p.dob){ r.age = ageOn(p.dob, ref); r.cat = r.age < st.infantMaxAge ? "Infant" : r.age < st.childMaxAge ? "Child" : "Adult"; } else r.issues.push("Date of birth missing");
+  r.passReq = addMonths(t.startDate, st.passportMonths);
+  r.passportOk = !!p.passportExpiry && p.passportExpiry >= r.passReq;
+  if (!p.passportNo) r.issues.push("Passport number missing");
+  if (!p.passportExpiry) r.issues.push("Passport expiry missing");
+  else if (!r.passportOk) r.issues.push(`Passport must be valid till ${fmtD(r.passReq)} (${st.passportMonths} months from start)`);
+  r.resReq = addMonths(t.startDate, st.residenceMonths);
+  r.residenceOk = !!p.onVisitVisa || (!!p.residenceExpiry && p.residenceExpiry >= r.resReq);
+  if (!p.onVisitVisa){ if (!p.residenceExpiry) r.issues.push("Residence card expiry missing"); else if (!r.residenceOk) r.issues.push(`Residence card must be valid till ${fmtD(r.resReq)} (${st.residenceMonths} months from start)`); }
+  if ((p.nationality || "Indian") !== "Indian") r.issues.push("Only Indian nationals are accepted");
+  const d = p.docs || {};
+  if (!d.passportFront) r.missing.push("Passport front"); if (!d.passportBack) r.missing.push("Passport back");
+  if (!p.onVisitVisa){ if (!d.residenceFront) r.missing.push("Residence front"); if (!d.residenceBack) r.missing.push("Residence back"); }
+  if (bp && bp.visaType === "HAS_MULTI" && !d.visa) r.missing.push("Visa copy");
+  if (bp && !bp.visaType) r.issues.push("Visa requirement not selected");
+  if (r.missing.length) r.issues.push("Upload missing: " + r.missing.join(", "));
+  const ds = p.docStatus || {}; r.rejectedDocs = DOCS.filter(([k]) => ds[k] === "rejected" && d[k]).map(([,l]) => l);
+  if (r.rejectedDocs.length) r.issues.push("Re-upload rejected: " + r.rejectedDocs.join(", "));
+  r.ok = !r.issues.length; return r;
+}
+const seatOf = (e, bp) => e.cat === "Infant" ? !!bp.seatRequired : true;
+function seatsUsed(tid, exceptId){
+  if (!isStaff() && DB.seats[tid] != null){ let n = DB.seats[tid]; const own = exceptId && D().bookings[exceptId]; if (own && ACTIVE.includes(own.status)){ const t = trip(tid); (own.passengers||[]).forEach(bp => { if (seatOf(evalPax(D().profiles[bp.profileId], t, bp), bp)) n--; }); } return Math.max(0, n); }
+  let n = 0; bookingsOf(tid).forEach(b => { if (b.id === exceptId || !ACTIVE.includes(b.status)) return; const t = trip(tid); (b.passengers||[]).forEach(bp => { if (seatOf(evalPax(D().profiles[bp.profileId], t, bp), bp)) n++; }); }); return n; }
+function dupBooking(tid, profileId, exceptId){ return bookingsOf(tid).find(b => b.id !== exceptId && (ACTIVE.includes(b.status) || b.status === "draft") && (b.passengers||[]).some(bp => bp.profileId === profileId)); }
+function calc(b){
+  const t = trip(b.tripId) || {}, lines = [];
+  (b.passengers||[]).forEach(bp => {
+    const p = D().profiles[bp.profileId], e = evalPax(p, t, bp), nm = p ? p.name : "?";
+    const stdFare = num((t.fares||{})[e.cat.toLowerCase()]), fare = bp.fareOverride != null ? num(bp.fareOverride) : stdFare;
+    lines.push({label:`${nm} – ${e.cat} fare` + (bp.fareOverride != null ? ` (adjusted from ${money(stdFare)})` : ""), amount:fare, stage:"pre", auto:true, adj: bp.fareOverride != null ? bp.fareNote : null});
+    const stdVf = num((t.visaFees||{})[bp.visaType]), vf = bp.visaOverride != null ? num(bp.visaOverride) : stdVf;
+    if (vf || bp.visaOverride != null) lines.push({label:`${nm} – ${visaName(bp.visaType)}` + (bp.visaOverride != null ? ` (adjusted from ${money(stdVf)})` : ""), amount:vf, stage:"pre", auto:true, adj: bp.visaOverride != null ? bp.fareNote : null});
+  });
+  if (!(b.passengers||[]).length && b.requested){ const f = t.fares || {}, r = b.requested; [["adults","Adult","adult"],["children","Child","child"],["infants","Infant","infant"]].forEach(([k,l,fk]) => { if (num(r[k])) lines.push({label:`Estimate: ${num(r[k])} × ${l} fare (visa fees extra)`, amount:num(r[k])*num(f[fk]), stage:"pre", auto:true, estimate:true}); }); }
+  (b.charges||[]).forEach(c => lines.push({label:c.label || "Charge", amount: c.type === "discount" ? -num(c.amount) : num(c.amount), stage:c.stage, charge:c}));
+  const sum = (arr) => arr.reduce((s,x) => s + x, 0);
+  const pre = sum(lines.filter(l => l.stage === "pre").map(l => l.amount)), on = sum(lines.filter(l => l.stage === "on").map(l => l.amount));
+  const pays = b.payments || [];
+  const paidPre = sum(pays.filter(p => p.status === "verified" && p.stage === "pre").map(p => num(p.amount)));
+  const paidOn = sum(pays.filter(p => p.status === "verified" && p.stage === "on").map(p => num(p.amount)));
+  const pending = pays.filter(p => p.status === "pending");
+  return {lines, pre, on, paidPre, paidOn, balPre: pre - paidPre, balOn: on - paidOn, pendingAmt: sum(pending.map(p => num(p.amount))), pendingCount: pending.length};
+}
+function regOpen(t){ const d = today(); return t.status === "open" && (!t.regOpen || d >= t.regOpen) && (!t.regClose || d <= t.regClose) && d < t.startDate; }
+const tripStarted = t => today() >= t.startDate;
+function pilgrimCanEdit(b, t){ return !!t && !tripStarted(t) && t.status !== "cancelled" && !["rejected","cancelled","travelled"].includes(b.status); }
+function bookingErrors(b, o = {}){
+  const t = trip(b.tripId), errs = [];
+  if (!t) return ["Trip not found"];
+  if (!(b.passengers||[]).length) errs.push("Add at least one passenger");
+  (b.passengers||[]).forEach(bp => { const p = D().profiles[bp.profileId], e = evalPax(p, t, bp); e.issues.forEach(i => errs.push(`${p ? p.name : "Passenger"}: ${i}`));
+    const dup = dupBooking(t.id, bp.profileId, b.id); if (dup) errs.push(`${p ? p.name : "Passenger"} is already on another booking for this trip (${leadName(dup)})`); });
+  let mine = 0; (b.passengers||[]).forEach(bp => { if (seatOf(evalPax(D().profiles[bp.profileId], t, bp), bp)) mine++; });
+  const used = seatsUsed(t.id, b.id); if (num(t.maxSeats) && used + mine > num(t.maxSeats)) errs.push(`Not enough seats: ${Math.max(0, num(t.maxSeats) - used)} left, ${mine} needed`);
+  if (!o.staff){ const prev = D().bookings[b.id]; if (!prev && !regOpen(t)) errs.push("Registration for this trip is not open"); if (tripStarted(t)) errs.push("The trip has started – changes can only be made by the office"); }
+  return errs;
+}
+
+/* ================= FILES (Supabase Storage, private bucket "docs") ================= */
+async function loadImg(f){ const url = URL.createObjectURL(f); try { return await new Promise((res,rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; }); } finally { setTimeout(() => URL.revokeObjectURL(url), 1000); } }
+async function shrink(f, max, q){ const img = await loadImg(f); const s = Math.min(1, max / Math.max(img.width, img.height)); const c = document.createElement("canvas"); c.width = Math.round(img.width*s); c.height = Math.round(img.height*s); c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); return await new Promise(r => c.toBlob(r, "image/jpeg", q)); }
+async function uploadFile(file){
+  const isImg = /^image\//.test(file.type) || /\.(heic|heif)$/i.test(file.name), isPdf = file.type === "application/pdf";
+  if (!isImg && !isPdf) throw new Error("Please upload a photo (JPG/PNG) or a PDF");
+  if (file.size > 15*1024*1024) throw new Error("File too large (max 15 MB)");
+  let blob = file, type = file.type || "image/heic", ext = isPdf ? "pdf" : (file.name.split(".").pop() || "jpg").toLowerCase();
+  if (isImg){ try { const b = await shrink(file, 1800, 0.82); if (b){ blob = b; type = "image/jpeg"; ext = "jpg"; } } catch(e){ /* browser can't read this image type – upload as is */ } }
+  const path = `u/${DB.user.id}/${crypto.randomUUID()}.${ext}`;
+  const {error} = await sb.storage.from("docs").upload(path, blob, {contentType:type, upsert:false});
+  if (error) throw new Error(error.message);
+  return {path, name:file.name, type};
+}
+async function fileUrl(ref){
+  if (!ref || !ref.path) return "";
+  const {data, error} = await sb.storage.from("docs").createSignedUrl(ref.path, 600);
+  if (error) throw new Error(error.message);
+  return data.signedUrl;
+}
+/* ================= TEMPLATE HELPERS ================= */
+const fld = (label, inner, cls="") => `<label class="fld ${cls}"><span>${label}</span>${inner}</label>`;
+const inp = (path, val, o={}) => `<input type="${o.type||"text"}" data-bind="${path}" value="${esc(val ?? "")}" placeholder="${esc(o.ph||"")}" ${o.rr?"data-rr":""} ${o.attrs||""}>`;
+const sel = (path, val, opts, o={}) => `<select data-bind="${path}" ${o.rr?"data-rr":""} ${o.attrs||""}>${o.blank===false?"":`<option value="">${o.blankLabel||"— Select —"}</option>`}${opts.map(([v,l]) => `<option value="${esc(v)}" ${String(v)===String(val ?? "")?"selected":""}>${esc(l)}</option>`).join("")}</select>`;
+const chk = (path, val, label, o={}) => `<label class="chk"><input type="checkbox" data-bind="${path}" ${val?"checked":""} ${o.rr?"data-rr":""}> ${label}</label>`;
+const chip = (t, c="") => `<span class="chip ${c}">${esc(t)}</span>`;
+const btn = (label, act, arg="", cls="", attrs="") => `<button type="button" class="btn ${cls}" data-act="${act}" data-arg="${esc(arg)}" ${attrs}>${label}</button>`;
+const bchip = s => chip((BSTATUS[s]||[s])[0], (BSTATUS[s]||[])[1]);
+const tchip = s => chip((TSTATUS[s]||[s])[0], (TSTATUS[s]||[])[1]);
+const catChip = c => chip(c, c === "Infant" ? "gold" : c === "Child" ? "teal" : "");
+const empty = msg => `<div class="card empty">${msg}</div>`;
+const opts = list => list.map(x => [x.id, x.name]);
+
+/* ================= VIEW / MODAL STATE ================= */
+let view = {name:"home"}, modal = null, dialog = null;
+let regTripId = (location.hash || "").startsWith("#reg-") ? location.hash.slice(5) : null;
+let login = {tab:"pilgrim", step:"mobile", mobile:"", isNew:false, otpSent:false};
+function go(name, params = {}){ view = {name, ...params}; render(); window.scrollTo(0,0); }
+const VIEWS = {};
+
+function render(){ keepState(renderNow); }
+function renderNow(){
+  const root = $("#root");
+  if (!sb){ root.innerHTML = `<div class="login"><div class="card"><h2>Setup needed</h2><p>Open <b>web/config.js</b> and fill in <code>SUPABASE_URL</code> and <code>SUPABASE_ANON_KEY</code> from Supabase → Project Settings → API.</p></div></div>`; return; }
+  if (!DB.loaded){ root.innerHTML = `<div class="login"><div class="hero"><div class="m"></div><h1>Umrah Trip Manager</h1><p class="mut">${DB.error ? esc(DB.error) : "Loading…"}</p></div></div>`; return; }
+  if (session && session.kind === "none"){ root.innerHTML = `<div class="login"><div class="card"><h2>No access yet</h2><p>You are logged in as <b>${esc(DB.user && DB.user.email)}</b>, but this login has not been given a staff role. Ask the Super Admin to add you under Settings → Staff users.</p>${btn("Log out","logout","","p")}</div></div>`; return; }
+  const u = me();
+  if (!u){ root.innerHTML = loginView(); return; }
+  if (u.kind === "pilgrim" && regTripId && view.name === "home"){ const t = trip(regTripId); regTripId = null; if (t){ startBooking(t.id, u.mobile); return; } }
+  const fn = VIEWS[view.name] || VIEWS.home;
+  let body; try { body = fn(); } catch(e){ console.error(e); body = empty("Something went wrong: " + esc(e.message)); }
+  root.innerHTML = shell(u, body);
+}
+function shell(u, body){
+  const items = u.kind === "staff"
+    ? [["home","Dashboard"],["trips","Trips"],["bookings","Bookings","bookings"],["pilgrims","Pilgrims","pilgrims"],["reports","Reports","reports"],["masters","Masters","masters"],["settings","Settings","settings"]].filter(i => !i[2] || can(i[2]))
+    : [["home","My bookings"],["people","My people"],["trips","Upcoming trips"]];
+  const cur = {booking: u.kind==="staff"?"bookings":"home", enquiry: u.kind==="staff"?"bookings":"home", bookingEdit: u.kind==="staff"?"bookings":"home", tripEdit:"trips", newBooking:"bookings"}[view.name] || view.name;
+  const who = u.kind === "staff" ? `${esc(u.name)}<br><span>${ROLES[u.role]}</span>` : `${esc(leadNameForAccount(u.mobile) || "Pilgrim")}<br><span>${showMobile(u.mobile)}</span>`;
+  return `<div class="top"><div class="brand"><i></i>${esc(settings().orgName)}</div><div class="sp"></div><div class="who">${who}</div>${btn("↻","refresh","","s","title=\"Refresh\"")}${btn("Log out","logout","","s")}</div>
+  <div class="layout"><nav class="side">${items.map(([k,l]) => `<a class="${cur===k?"on":""}" data-act="nav" data-arg="${k}">${l}</a>`).join("")}</nav><main>${body}</main></div>`;
+}
+
+/* ================= LOGIN ================= */
+function loginView(){
+  const st = settings(), t = regTripId && trip(regTripId), otp = st.otpMode !== "off";
+  let form = "";
+  if (login.tab === "pilgrim"){
+    if (login.step === "mobile"){
+      form = `<form data-submit="pilMobile" class="grid">${fld("Mobile number", `<input name="mobile" inputmode="tel" placeholder="e.g. 9123 4567" value="${esc(login.mobile)}" required>`)}
+      <button class="btn p l">Continue</button><p class="sm mut">Use the mobile number you want to manage your family's bookings with. Omani numbers can be typed without 968.</p></form>`;
+    } else if (otp){
+      form = `<form data-submit="pilOtp" class="grid"><div class="row between"><b>${showMobile(login.mobile)}</b><a class="sm" data-act="loginBack">Change</a></div>
+      ${login.otpSent ? `<p class="sm mut">Enter the code sent by ${st.otpMode === "sms" ? "SMS" : "WhatsApp"}.</p>${fld("One-time code", `<input name="otp" inputmode="numeric" maxlength="6" required autofocus>`)}<button class="btn p l">Verify</button><a class="sm" data-act="sendOtp">Send the code again</a>`
+        : `<p class="sm mut">We'll send a one-time code by ${st.otpMode === "sms" ? "SMS" : "WhatsApp"}.</p>${btn("Send code","sendOtp","","p l")}`}</form>`;
+    } else {
+      form = `<form data-submit="pilAuth" class="grid"><div class="row between"><b>${showMobile(login.mobile)}</b><a class="sm" data-act="loginBack">Change</a></div>
+      ${login.isNew ? `<p class="sm mut">First time here – choose a <b>6-digit PIN</b>. You'll use it to log in next time.</p>${fld("Choose PIN", `<input name="pin" type="password" inputmode="numeric" minlength="6" maxlength="6" required>`)}${fld("Confirm PIN", `<input name="pin2" type="password" inputmode="numeric" minlength="6" maxlength="6" required>`)}<button class="btn p l">Create account</button><a class="sm" data-act="pinMode" data-arg="old">I already have a PIN</a>`
+        : `${fld("6-digit PIN", `<input name="pin" type="password" inputmode="numeric" maxlength="6" required autofocus>`)}<button class="btn p l">Log in</button><a class="sm" data-act="pinMode" data-arg="new">First time? Create a PIN</a><p class="sm mut">Forgot your PIN? Ask the office to reset it.</p>`}</form>`;
+    }
+  } else {
+    form = `<form data-submit="staffLogin" class="grid">${fld("Email", `<input name="email" type="email" autocomplete="username" required>`)}${fld("Password", `<input name="pw" type="password" autocomplete="current-password" required>`)}<button class="btn p l">Log in</button>
+    <p class="sm mut">Staff logins are created by the Super Admin in Supabase.</p></form>`;
+  }
+  return `<div class="login"><div class="hero"><div class="m"></div><h1>${esc(st.orgName)}</h1><p class="mut">Umrah registration & trip management</p></div>
+  ${t ? `<div class="ok">Registering for <b>${esc(t.title)}</b> · ${fmtD(t.startDate)} – ${fmtD(t.endDate)} · ${t.mode === "flight" ? "Flight" : "Bus"}</div>` : ""}
+  <div class="card"><div class="seg"><a class="${login.tab==="pilgrim"?"on":""}" data-act="loginTab" data-arg="pilgrim">Pilgrim</a><a class="${login.tab==="staff"?"on":""}" data-act="loginTab" data-arg="staff">Staff</a></div>${form}</div></div>`;
+}
+/* ================= PILGRIM VIEWS ================= */
+function pilgrimHome(){
+  const u = me(), mine = allBookings().filter(b => b.accountMobile === u.mobile).sort((a,b) => ((trip(b.tripId)||{}).startDate||"").localeCompare((trip(a.tripId)||{}).startDate||""));
+  const open = visibleTrips().filter(regOpen).filter(t => !mine.some(b => b.tripId === t.id && !["cancelled","rejected"].includes(b.status)));
+  let h = `<h1>Assalamu alaikum${leadNameForAccount(u.mobile) ? ", " + esc(leadNameForAccount(u.mobile).split(" ")[0]) : ""}</h1>`;
+  h += `<h2>My bookings</h2>`;
+  h += mine.length ? mine.map(b => bookingCard(b)).join("") : empty("No bookings yet.");
+  if (open.length){ h += `<h2 style="margin-top:20px">Open for registration</h2>` + open.map(t => tripCard(t, true)).join(""); }
+  return h;
+}
+function bookingCard(b){
+  const t = trip(b.tripId) || {}, c = calc(b), cats = {};
+  (b.passengers||[]).forEach(bp => { const e = evalPax(D().profiles[bp.profileId], t, bp); cats[e.cat] = (cats[e.cat]||0) + 1; });
+  return `<div class="card tight" data-act="openBooking" data-arg="${b.id}" style="cursor:pointer"><div class="row between"><div><b>${esc(t.title||"Trip")}</b> <span class="mut sm">${fmtD(t.startDate)}</span></div>${bchip(b.status)}</div>
+  ${b.status === "details" ? `<div class="note" style="margin:8px 0 0">Please add passenger details and upload documents.</div>` : ""}<div class="row sm mut" style="margin-top:4px">${Object.entries(cats).map(([k,v]) => `${v} ${k}`).join(" · ") || (b.requested ? "Requested: " + reqText(b.requested) : "No passengers")} · ${b.type === "bachelor" ? "Bachelor" : "Family"}</div>
+  <div class="row sm" style="margin-top:6px"><span>Due before trip: <b>${money(Math.max(0,c.balPre))}</b></span>${c.balOn > 0.0005 ? `<span>· On-trip due: <b>${money(c.balOn)}</b></span>` : ""}${c.pendingCount ? chip(c.pendingCount + " payment(s) awaiting verification","amber") : ""}</div></div>`;
+}
+function tripSummary(t){
+  const legs = (t.legs||[]).map(l => `<tr><td><b>${esc(l.city)}</b></td><td>${fmtD(l.checkIn)} → ${fmtD(l.checkOut)}</td><td>${l.checkIn && l.checkOut ? daysBetween(l.checkIn, l.checkOut) + " nights" : ""}</td><td>${esc(mName("hotels", l.hotelId))}</td><td>${esc(mName("food", l.foodId))}</td></tr>`).join("");
+  const f = t.fares || {};
+  return `<div class="kv"><span>Dates</span><span><b>${fmtD(t.startDate)}</b> – <b>${fmtD(t.endDate)}</b> (${t.startDate && t.endDate ? daysBetween(t.startDate, t.endDate) + 1 : "?"} days)</span>
+  <span>Travel</span><span>${t.mode === "flight" ? "Flight" : "Bus"}${t.transportId ? " · " + esc(mName("transport", t.transportId)) : ""}${t.departure ? " · from " + esc(t.departure) : ""}</span>
+  <span>Ameer</span><span>${esc(staffName(t.ameerId))}</span>
+  <span>Fares</span><span>Adult ${money(f.adult)} · Child ${money(f.child)} · Infant ${money(f.infant)}</span></div>
+  ${legs ? `<div class="tw" style="margin-top:10px"><table><thead><tr><th>City</th><th>Stay</th><th></th><th>Hotel</th><th>Food</th></tr></thead><tbody>${legs}</tbody></table></div>` : ""}`;
+}
+function tripCard(t, forPilgrim){
+  const used = seatsUsed(t.id), max = num(t.maxSeats);
+  const actions = forPilgrim ? (regOpen(t) ? btn("Register","register",t.id,"p") : "")
+    : `${can("trips") ? btn("Edit","editTrip",t.id,"s") : ""}${btn("Bookings","tripBookings",t.id,"s")}${can("reports") ? btn("Reports","tripReports",t.id,"s") : ""}${btn("Copy registration link","copyLink",t.id,"s")}`;
+  return `<div class="card"><div class="trip-h"><div><h2 style="margin:0">${esc(t.title)}</h2><div class="sm mut">${esc(t.code||"")}</div></div><div class="row">${tchip(t.status)}${chip(t.mode === "flight" ? "Flight" : "Bus","blue")}</div></div>
+  <div style="margin:10px 0">${tripSummary(t)}</div>
+  ${max ? `<div class="sm mut">Seats: ${used} / ${max}</div><div class="bar"><i style="width:${Math.min(100, used/max*100)}%"></i></div>` : ""}
+  <div class="row" style="margin-top:12px">${actions}</div></div>`;
+}
+VIEWS.people = () => {
+  const u = me(), people = accountPeople(u.mobile);
+  let h = `<div class="row between"><h1>My people</h1><div class="row">${btn("Link existing person","linkPerson","","s")}${btn("+ Add person","editPerson","new","p")}</div></div>
+  <p class="mut sm">These details are kept for future trips. You can update them any time before a trip starts.</p>`;
+  if (!people.length) return h + empty("No one added yet. Start with your own details.");
+  return h + people.map(c => { const p = D().profiles[c.profileId]; const docs = DOCS.filter(([k]) => (p.docs||{})[k]).length;
+    return `<div class="card tight row between"><div><b>${esc(p.name)}</b> ${chip(c.relationship)}<div class="sm mut">DOB ${fmtD(p.dob)} · Passport ${esc(p.passportNo||"—")} exp ${fmtD(p.passportExpiry)} · ${p.onVisitVisa ? "Visit visa" : "Residence exp " + fmtD(p.residenceExpiry)} · ${docs} document(s)</div></div>${btn("Edit","editPerson",c.profileId+"|"+c.relationship,"s")}</div>`; }).join("");
+};
+
+/* ================= BOOKING EDITOR ================= */
+function startBooking(tripId, mobile){
+  const existing = allBookings().find(b => b.tripId === tripId && b.accountMobile === mobile && !["cancelled","rejected"].includes(b.status));
+  if (existing){ go(isStaff() ? "booking" : "booking", {id: existing.id}); return; }
+  const a = D().accounts[mobile] || {};
+  go("enquiry", {isForm:true, draft:{id:crypto.randomUUID(), tripId, accountMobile:mobile, leadName: leadNameForAccount(mobile) || "", type:"family", status:"enquiry", requested:{adults:1, children:0, infants:0}, remarks:"", passengers:[], charges:[], payments:[], requests:[], history:[], createdAt:nowISO()}});
+}
+VIEWS.enquiry = () => {
+  const d = view.draft, t = trip(d.tripId); if (!t) return empty("Trip not found");
+  const r = d.requested, left = num(t.maxSeats) ? Math.max(0, num(t.maxSeats) - seatsUsed(t.id, d.id)) : null, want = num(r.adults) + num(r.children);
+  const est = calc(d), prev = D().bookings[d.id];
+  return `<h1>${prev ? "Edit request" : "Register interest"}</h1><p class="mut sm">Tell us who is travelling. Our team will contact you, and after that you'll be asked for passport details and document copies.</p>
+  <div class="card">${tripSummary(t)}</div>
+  <div class="card"><div class="grid g2">${fld("Your name *", inp("leadName", d.leadName, {ph:"Full name"}))}${fld("Mobile", `<input value="${showMobile(d.accountMobile)}" disabled>`)}
+  ${fld("Travelling as", sel("type", d.type, [["family","Family"],["bachelor","Bachelor"]], {blank:false}))}</div>
+  <div class="grid g3" style="margin-top:12px">${fld(`Adults (${settings().childMaxAge} yrs+, incl. you)`, inp("requested.adults", r.adults, {type:"number", rr:true, attrs:'min="0" max="60"'}))}${fld(`Children (${settings().infantMaxAge}–under ${settings().childMaxAge} yrs)`, inp("requested.children", r.children, {type:"number", rr:true, attrs:'min="0" max="60"'}))}${fld(`Infants (under ${settings().infantMaxAge} yr)`, inp("requested.infants", r.infants, {type:"number", rr:true, attrs:'min="0" max="20"'}))}</div>
+  <p class="sm mut">Age is counted on ${fmtD(addDays(t.startDate,1))}. Infants travel without a seat unless requested.</p>
+  ${left != null && want > left ? `<div class="note">Only ${left} seat(s) are left on this trip – we'll confirm availability when we contact you.</div>` : ""}
+  <div style="margin-top:12px">${fld("Anything we should know? (optional)", `<textarea data-bind="remarks" rows="3" placeholder="e.g. need a family room, wheelchair, already have a visa…">${esc(d.remarks||"")}</textarea>`)}</div></div>
+  <div class="card"><h3>Estimated cost</h3>${chargesTable(est, false)}<p class="sm mut">Final amount is confirmed by the office.</p></div>
+  <div class="stick">${btn("Cancel","cancelEdit",d.id)}${btn(prev ? "Save" : "Send request","saveEnquiry","","p")}</div>`;
+};
+VIEWS.bookingEdit = () => {
+  const d = view.draft, t = trip(d.tripId); if (!t) return empty("Trip not found");
+  const staff = isStaff(), prev = D().bookings[d.id], c = calc(d), errs = bookingErrors(d, {staff});
+  const people = accountPeople(d.accountMobile).filter(x => !d.passengers.some(p => p.profileId === x.profileId));
+  const paxHtml = d.passengers.map((bp, i) => {
+    const p = D().profiles[bp.profileId], e = evalPax(p, t, bp), dup = dupBooking(t.id, bp.profileId, d.id);
+    return `<div class="pax"><div class="row between"><div><b>${esc(p ? p.name : "?")}</b> ${catChip(e.cat)} <span class="sm mut">${e.age != null ? "Age " + e.age + " on " + fmtD(addDays(t.startDate,1)) : ""}</span></div>
+      <div class="row">${btn("Edit details","editPerson",bp.profileId+"|"+bp.relationship+"|bk","s")}${btn("Remove","removePax",i,"s d")}</div></div>
+      <div class="grid g3" style="margin-top:10px">${fld("Relationship to you", sel(`passengers.${i}.relationship`, bp.relationship, RELS.map(r => [r,r]), {blank:false}))}
+      ${fld("Visa", sel(`passengers.${i}.visaType`, bp.visaType, DEFAULT_VISA.map(v => [v.id, v.name]), {rr:true}))}
+      ${e.cat === "Infant" ? `<div class="fld"><span>Seat</span>${chk(`passengers.${i}.seatRequired`, bp.seatRequired, "Needs own seat", {rr:true})}</div>` : ""}</div>
+      ${e.issues.length || dup ? `<div class="issues" style="margin:10px 0 0"><ul>${e.issues.map(x => `<li>${esc(x)}</li>`).join("")}${dup ? `<li>Already booked on another registration for this trip</li>` : ""}</ul></div>` : `<div class="sm" style="color:var(--g);margin-top:8px">✓ Passport, residence and documents OK</div>`}</div>`;
+  }).join("");
+  const editingApproved = prev && ["approved","confirmed"].includes(prev.status);
+  return `<div class="row between"><h1>${prev ? "Edit booking" : "New registration"}</h1>${prev ? bchip(prev.status) : ""}</div>
+  <div class="card">${tripSummary(t)}</div>
+  ${editingApproved ? `<div class="note">This booking is already approved. Saving changes will send it back for review.</div>` : ""}
+  <div class="card"><div class="grid g2">${fld("Booking type", sel("type", d.type, [["family","Family"],["bachelor","Bachelor"]], {blank:false}))}
+  ${staff ? fld("Lead mobile (login)", `<input value="${showMobile(d.accountMobile)}" disabled>`) : ""}</div></div>
+  ${d.requested ? `<p class="sm mut">Requested at registration: <b>${esc(reqText(d.requested))}</b>. Add each person below with passport details and document copies.</p>` : ""}
+  <h2>Passengers (${d.passengers.length})</h2>${paxHtml || empty("No passengers added yet.")}
+  <div class="card"><h3>Add passengers</h3>
+    ${people.length ? `<div class="grid g2">${people.map(x => { const p = D().profiles[x.profileId], dup = dupBooking(t.id, x.profileId, d.id); return `<div class="row between pax" style="margin:0"><div><b>${esc(p.name)}</b> <span class="sm mut">${esc(x.relationship)}</span>${dup ? `<div class="sm" style="color:var(--red)">Already on ${esc(leadName(dup))}'s booking</div>` : ""}</div>${btn("Add","addPax",x.profileId+"|"+x.relationship,"s p", dup ? "disabled" : "")}</div>`; }).join("")}</div>` : `<p class="sm mut">Everyone saved under this mobile is already added.</p>`}
+    <div class="row" style="margin-top:10px">${btn("+ New person","editPerson","new||bk","")}${btn("Link existing person (passport no.)","linkPerson","bk","")}</div></div>
+  <div class="card"><h3>Estimated charges</h3>${chargesTable(c, false)}</div>
+  ${errs.length && view.showErrs ? `<div class="issues"><b>Please fix before submitting:</b><ul>${errs.map(e => `<li>${esc(e)}</li>`).join("")}</ul></div>` : ""}
+  <div class="stick">${btn("Cancel","cancelEdit",d.id)}${(!prev || ["draft","enquiry","details"].includes(prev.status)) ? btn("Save without submitting","saveBooking","draft") : ""}${btn(!prev || ["draft","correction","enquiry","details"].includes(prev.status) ? "Submit for approval" : "Save changes","saveBooking","submit","p")}</div>`;
+};
+function chargesTable(c, withActions){
+  const rows = c.lines.map((l, i) => `<tr><td>${esc(l.label)}${l.adj ? `<div class="sm mut">Reason: ${esc(l.adj)}</div>` : ""}${l.estimate ? " " + chip("estimate") : ""}${l.charge && l.charge.stage === "on" ? " " + chip(l.charge.settle === "after" ? "settle after return" : "settle during trip","amber") : ""}${l.charge && l.charge.note ? `<div class="sm mut">${esc(l.charge.note)}</div>` : ""}</td><td>${l.stage === "on" ? chip("On-trip","amber") : chip("Before trip")}</td><td>${money(l.amount)}${withActions && l.charge && can("charges") ? " " + btn("✕","delCharge",l.charge.id,"s d") : ""}</td></tr>`).join("");
+  return `<div class="tw"><table class="money"><thead><tr><th>Item</th><th>Due</th><th>Amount</th></tr></thead><tbody>${rows || `<tr><td colspan="3" class="mut">No charges</td></tr>`}
+  <tr class="tot"><td>Total due before trip</td><td></td><td>${money(c.pre)}</td></tr>
+  ${c.on ? `<tr class="tot"><td>Total on-trip charges</td><td></td><td>${money(c.on)}</td></tr>` : ""}</tbody></table></div>`;
+}
+
+/* ================= BOOKING DETAIL ================= */
+VIEWS.booking = () => {
+  const b = getBooking(view.id); if (!b) return empty("Booking not found");
+  const t = trip(b.tripId) || {}, c = calc(b), u = me(), staff = u.kind === "staff";
+  if (!staff && b.accountMobile !== u.mobile) return empty("Not your booking");
+  const errs = bookingErrors(b, {staff:true});
+  const pax = (b.passengers||[]).map(bp => {
+    const p = D().profiles[bp.profileId] || {}, e = evalPax(p, t, bp), ds = p.docStatus || {};
+    const docs = DOCS.map(([k,l]) => { const ref = (p.docs||{})[k]; if (!ref){ if (k === "visa" && bp.visaType !== "HAS_MULTI") return ""; if (k.startsWith("residence") && p.onVisitVisa) return ""; return `<span class="doc miss">${l}: missing</span>`; }
+      const s = ds[k] || "pending"; return `<span class="doc" data-act="viewDoc" data-arg="${esc(JSON.stringify(ref))}">${l} ${chip(s, s === "verified" ? "green" : s === "rejected" ? "red" : "amber")}</span>${staff && can("docs") ? `<span class="row" style="gap:3px">${btn("✓","docStatus",[bp.profileId,k,"verified"].join("|"),"s")}${btn("✕","docStatus",[bp.profileId,k,"rejected"].join("|"),"s d")}</span>` : ""}`; }).join("");
+    return `<div class="pax"><div class="row between"><div><b>${esc(p.name)}</b> ${catChip(e.cat)} <span class="sm mut">${esc(bp.relationship)} · ${p.gender || ""} · Age ${e.age ?? "?"}</span></div><div class="row">${staff && can("approve") ? btn("Adjust fare","adjFare",String((b.passengers||[]).indexOf(bp)),"s") : ""}${staff && can("editBooking") ? btn("Edit person","editPerson",bp.profileId+"|"+bp.relationship+"|view","s") : ""}</div></div>
+      ${bp.fareOverride != null || bp.visaOverride != null ? `<div class="sm" style="margin-top:4px">${chip("Fare adjusted","gold")} ${bp.fareOverride != null ? "Fare " + money(bp.fareOverride) : ""}${bp.visaOverride != null ? " · Visa fee " + money(bp.visaOverride) : ""}${bp.fareNote ? " – " + esc(bp.fareNote) : ""}</div>` : ""}
+      <div class="sm" style="margin-top:6px">Passport <b>${esc(p.passportNo||"—")}</b> exp ${fmtD(p.passportExpiry)} ${e.passportOk ? chip("valid","green") : chip("not valid","red")} · ${p.onVisitVisa ? chip("Visit visa","blue") : `Residence exp ${fmtD(p.residenceExpiry)} ${e.residenceOk ? chip("valid","green") : chip("not valid","red")}`} · ${esc(visaName(bp.visaType))}${e.cat === "Infant" ? " · " + (bp.seatRequired ? "with seat" : "no seat") : ""}</div>
+      <div class="sm mut">DOB ${fmtD(p.dob)} · ${esc(mName("regions",p.regionId))} / ${esc(mName("divisions",p.divisionId))} / ${esc(mName("units",p.unitId))}${p.mobile ? " · " + showMobile(p.mobile) : ""}</div>
+      <div class="doclist">${docs}</div></div>`;
+  }).join("");
+  const pays = (b.payments||[]).map(p => `<tr><td>${fmtD(p.date)}<div class="sm mut">${p.method === "cash" ? "Cash by hand" : "Bank transfer"}${p.ref ? " · " + esc(p.ref) : ""}</div></td><td>${p.stage === "on" ? "On-trip" : "Before trip"}</td>
+    <td>${p.receipt ? `<span class="doc" data-act="viewDoc" data-arg="${esc(JSON.stringify(p.receipt))}">Receipt</span>` : "—"}<div class="sm mut">${esc(p.by||"")}</div></td>
+    <td>${chip(p.status, p.status === "verified" ? "green" : p.status === "rejected" ? "red" : "amber")}${p.reason ? `<div class="sm mut">${esc(p.reason)}</div>` : ""}${p.status === "pending" && can("verifyPay") ? `<div class="row" style="margin-top:4px">${btn("Verify","payStatus",p.id+"|verified","s p")}${btn("Reject","payStatus",p.id+"|rejected","s d")}</div>` : ""}</td><td>${money(p.amount)}</td></tr>`).join("");
+  const reqs = (b.requests||[]).map(r => `<div class="row between pax" style="margin-bottom:6px"><div>${esc(r.text)}<div class="sm mut">${fmtDT(r.at)} · ${esc(r.by)}</div></div>${r.status === "done" ? chip("Handled","green") : (staff && can("charges") ? btn("Mark handled","reqDone",r.id,"s") : chip("Open","amber"))}</div>`).join("");
+  const sb = s => btn(s === "details" ? "Request details & documents" : s === "enquiry" && b.status === "details" ? "Back to new request" : BSTATUS[s][0], "setStatus", s, s === "approved" || s === "confirmed" ? "p" : s === "rejected" || s === "cancelled" ? "d" : "");
+  let actions = "";
+  if (staff && can("approve")){
+    const st = b.status, opts = {enquiry:["details","rejected","cancelled"], details:["enquiry","cancelled"], draft:["submitted","cancelled"], submitted:["review","correction","approved","rejected"], review:["correction","approved","rejected"], correction:["review","approved","rejected","cancelled"], approved:["confirmed","correction","cancelled"], confirmed:["travelled","approved","cancelled"], travelled:[], rejected:["review"], cancelled:["review"]}[st] || [];
+    actions = opts.map(sb).join("");
+  }
+  const pilEdit = !staff && pilgrimCanEdit(b, t) && b.status !== "enquiry";
+  const reqBox = b.requested ? `<div class="card tight"><div class="row between"><div><b>Initial request:</b> ${esc(reqText(b.requested))} · ${b.type === "bachelor" ? "Bachelor" : "Family"}${b.remarks ? `<div class="sm mut">“${esc(b.remarks)}”</div>` : ""}</div>${!staff && b.status === "enquiry" && pilgrimCanEdit(b,t) ? btn("Edit request","editEnquiry",b.id,"s") : ""}</div></div>` : "";
+  const stageNote = b.status === "enquiry" ? (staff ? `<div class="note">New request – call <b>${showMobile(b.accountMobile)}</b>, then click <b>Request details & documents</b> so the pilgrim can add passports and uploads. You can also fill in the details yourself with <b>Edit booking</b>.</div>` : `<div class="ok">Thank you – your request has been received. Our team will contact you on ${showMobile(b.accountMobile)}. After that you'll be asked for passport details and documents.</div>`)
+    : b.status === "details" ? (staff ? `<div class="note">Waiting for the pilgrim to add passenger details and documents.</div>` : `<div class="note row between"><span>Please add each passenger's passport details and upload the document copies, then submit for approval.</span>${btn("Add passenger details","editBooking",b.id,"p s")}</div>`) : "";
+  return `<div class="row between"><div><a class="sm" data-act="nav" data-arg="${staff ? "bookings" : "home"}">← Back</a><h1 style="margin-top:4px">${esc(leadName(b))}</h1><div class="sm mut">${esc(t.title||"")} · ${showMobile(b.accountMobile)} · ${b.type === "bachelor" ? "Bachelor" : "Family"} · ${b.passengers.length} passenger(s)</div></div><div>${bchip(b.status)}</div></div>
+  ${b.remark ? `<div class="note"><b>Office remark:</b> ${esc(b.remark)}</div>` : ""}${stageNote}${reqBox}
+  ${PIPE.includes(b.status) ? "" : errs.length ? `<div class="issues"><b>Open issues</b><ul>${errs.map(e => `<li>${esc(e)}</li>`).join("")}</ul></div>` : ACTIVE.includes(b.status) ? `<div class="ok">All passports, residence cards and documents pass the checks for this trip.</div>` : ""}
+  <div class="row" style="margin:6px 0 14px">${pilEdit || (staff && can("editBooking")) ? btn("Edit booking","editBooking",b.id,"p") : ""}${staff && can("approve") ? btn("Reset pilgrim PIN","resetPin",b.accountMobile,"") : ""}${!staff && !pilEdit && b.status !== "cancelled" ? `<span class="sm mut">The trip has started or the booking is closed – contact the office for changes.</span>` : ""}</div>
+  <h2>Passengers</h2>${pax || `<p class="sm mut">Passenger details not added yet.</p>`}
+  <div class="card"><div class="row between"><h3>Special room requests</h3>${!["cancelled","rejected","travelled"].includes(b.status) ? btn("+ Request special room","newRequest",b.id,"s") : ""}</div>${reqs || `<p class="sm mut">None. Families or groups can ask for a private room in Makkah or Madinah – extra charges apply.</p>`}</div>
+  <div class="card"><div class="row between"><h3>Charges</h3>${staff && can("charges") ? btn("+ Add charge","newCharge",b.id,"s") : ""}</div>${chargesTable(c, true)}</div>
+  <div class="card"><div class="row between"><h3>Payments</h3>${(staff && can("payments")) || (!staff && !["cancelled","enquiry"].includes(b.status)) ? btn(staff ? "+ Record payment" : "+ Upload payment slip","newPayment",b.id,"s p") : ""}</div>
+    <div class="grid g4 keep" style="margin:10px 0">
+      <div class="stat"><div class="k">Due before trip</div><div class="v">${money(c.pre)}</div></div><div class="stat"><div class="k">Paid (verified)</div><div class="v">${money(c.paidPre)}</div></div>
+      <div class="stat"><div class="k">Balance before trip</div><div class="v" style="color:${c.balPre > 0.0005 ? "var(--red)" : "var(--g)"}">${money(c.balPre)}</div></div><div class="stat"><div class="k">On-trip balance</div><div class="v">${money(c.balOn)}</div></div></div>
+    ${c.balPre > 0.0005 && t.startDate ? `<p class="sm" style="color:var(--red)">Full pre-trip amount must be paid before ${fmtD(t.startDate)}.</p>` : ""}
+    <div class="tw"><table class="money"><thead><tr><th>Date</th><th>For</th><th>Receipt</th><th>Status</th><th>Amount</th></tr></thead><tbody>${pays || `<tr><td colspan="5" class="mut">No payments yet</td></tr>`}</tbody></table></div></div>
+  ${actions ? `<div class="card"><h3>Approval</h3><div class="row">${actions}</div></div>` : ""}
+  <div class="card"><h3>History</h3><div class="hist">${(b.history||[]).slice().reverse().map(h => `<div><b>${esc(h.text)}</b><br><span class="mut">${fmtDT(h.at)} · ${esc(h.by)}</span></div>`).join("") || "<div class='mut'>—</div>"}</div></div>`;
+};
+
+/* ================= STAFF: DASHBOARD ================= */
+function tripStats(t){
+  const bs = bookingsOf(t.id), s = {bookings:0, pax:0, seats:0, Adult:0, Child:0, Infant:0, pendAppr:0, pendPay:0, outPre:0, issues:0, byStatus:{}};
+  s.newReq = 0; s.reqSeats = 0; s.waitDetails = 0;
+  bs.forEach(b => { s.byStatus[b.status] = (s.byStatus[b.status]||0) + 1; if (b.status === "enquiry"){ s.newReq++; } if (PIPE.includes(b.status)){ if (b.status === "details") s.waitDetails++; s.reqSeats += num((b.requested||{}).adults) + num((b.requested||{}).children); } if (!ACTIVE.includes(b.status)) return; s.bookings++; const c = calc(b); s.outPre += Math.max(0, c.balPre); s.pendPay += c.pendingCount; if (["submitted","review"].includes(b.status)) s.pendAppr++; if (bookingErrors(b, {staff:true}).length) s.issues++;
+    (b.passengers||[]).forEach(bp => { const e = evalPax(D().profiles[bp.profileId], t, bp); s.pax++; if (s[e.cat] != null) s[e.cat]++; if (seatOf(e, bp)) s.seats++; }); });
+  return s;
+}
+function staffHome(){
+  const trips = visibleTrips().filter(t => !["completed","cancelled"].includes(t.status)).sort((a,b) => (a.startDate||"").localeCompare(b.startDate||""));
+  let h = `<div class="row between"><h1>Dashboard</h1><div class="row">${can("newBooking") ? btn("+ New booking","nav","newBooking","") : ""}${can("trips") ? btn("+ New trip","newTrip","","p") : ""}</div></div>`;
+  if (!trips.length) return h + empty(can("trips") ? "No active trips. Create the first trip to start registrations." : "No active trips assigned to you.");
+  return h + trips.map(t => { const s = tripStats(t), days = daysBetween(today(), t.startDate);
+    return `<div class="card"><div class="trip-h"><div><h2 style="margin:0">${esc(t.title)}</h2><div class="sm mut">${fmtD(t.startDate)} – ${fmtD(t.endDate)} · ${t.mode === "flight" ? "Flight" : "Bus"} · Ameer ${esc(staffName(t.ameerId))}</div></div><div class="row">${tchip(t.status)}${days >= 0 ? chip(days === 0 ? "Starts today" : days + " days to go", days <= 7 ? "amber" : "") : ""}</div></div>
+    ${s.newReq || s.waitDetails ? `<div class="row" style="margin-top:10px">${s.newReq ? `<a data-act="tripPipe" data-arg="${t.id}" style="cursor:pointer">${chip(s.newReq + " new request(s) to call","gold")}</a>` : ""}${s.waitDetails ? chip(s.waitDetails + " waiting for details","amber") : ""}${chip(s.reqSeats + " seat(s) requested in pipeline")}</div>` : ""}
+    <div class="grid g4 keep" style="margin-top:12px">
+      <div class="stat"><div class="k">Seats used</div><div class="v">${s.seats}${num(t.maxSeats) ? " / " + t.maxSeats : ""}</div></div>
+      <div class="stat"><div class="k">Passengers</div><div class="v">${s.pax}</div><div class="k">${s.Adult} adult · ${s.Child} child · ${s.Infant} infant</div></div>
+      <div class="stat"><div class="k">Awaiting approval</div><div class="v" style="color:${s.pendAppr ? "var(--blu)" : ""}">${s.pendAppr}</div><div class="k">${s.issues} with open issues</div></div>
+      <div class="stat"><div class="k">Pre-trip outstanding</div><div class="v" style="color:${s.outPre > 0.0005 ? "var(--red)" : "var(--g)"}">${money(s.outPre)}</div><div class="k">${s.pendPay} payment(s) to verify</div></div></div>
+    <div class="row" style="margin-top:12px">${btn("Open bookings","tripBookings",t.id,"s p")}${can("reports") ? btn("Reports","tripReports",t.id,"s") : ""}${btn("Copy registration link","copyLink",t.id,"s")}</div></div>`; }).join("");
+}
+VIEWS.home = () => me().kind === "pilgrim" ? pilgrimHome() : staffHome();
+
+/* ================= TRIPS ================= */
+VIEWS.trips = () => {
+  const ts = me().kind === "pilgrim" ? visibleTrips().filter(t => ["open","closed"].includes(t.status) && !tripStarted(t)) : visibleTrips();
+  if (me().kind === "pilgrim") return `<h1>Upcoming trips</h1>` + (ts.length ? ts.map(t => tripCard(t, true)).join("") : empty("No upcoming trips at the moment."));
+  return `<div class="row between"><h1>Trips</h1>${can("trips") ? btn("+ New trip","newTrip","","p") : ""}</div>` + (ts.length ? ts.map(t => tripCard(t, false)).join("") : empty("No trips yet."));
+};
+function blankTrip(){ return {id:crypto.randomUUID(), code:"", title:"", mode:"bus", transportId:"", departure:"Muscat", ameerId:"", startDate:"", endDate:"", regOpen:today(), regClose:"", maxSeats:50, status:"draft", legs:[{city:"Makkah", checkIn:"", checkOut:"", hotelId:"", foodId:""},{city:"Madinah", checkIn:"", checkOut:"", hotelId:"", foodId:""}], fares:{adult:0, child:0, infant:0}, visaFees:{HAS_MULTI:0, NEED_MULTI:0, NEED_UMRAH:0}, roomRates:{Makkah:{}, Madinah:{}}, notes:""}; }
+VIEWS.tripEdit = () => {
+  const t = view.draft, m = masters(), isNew = !D().trips[t.id];
+  const staffOpts = Object.entries(D().staff).filter(([,s]) => s.active !== false).map(([id,s]) => [id, s.name + " (" + ROLES[s.role] + ")"]);
+  const legs = (t.legs||[]).map((l,i) => `<div class="leg">${fld("City", sel(`legs.${i}.city`, l.city, CITIES.map(c => [c,c]), {blank:false, rr:true}))}${fld("Check-in", inp(`legs.${i}.checkIn`, l.checkIn, {type:"date", rr:true}))}${fld("Check-out", inp(`legs.${i}.checkOut`, l.checkOut, {type:"date", rr:true}))}
+    ${fld("Hotel" + (l.checkIn && l.checkOut ? ` · ${daysBetween(l.checkIn,l.checkOut)} nights` : ""), sel(`legs.${i}.hotelId`, l.hotelId, opts(m.hotels.filter(h => !h.city || h.city === l.city))))}${fld("Food supplier", sel(`legs.${i}.foodId`, l.foodId, opts(m.food.filter(h => !h.city || h.city === l.city))))}${btn("✕","delLeg",i,"s d")}</div>`).join("");
+  const rates = CITIES.map(c => `<div><b class="sm">${c}</b><div class="grid g2" style="margin-top:6px">${m.roomTypes.map(rt => fld(esc(rt.name) + " / night", inp(`roomRates.${c}.${rt.id}`, ((t.roomRates||{})[c]||{})[rt.id], {type:"number", attrs:'step="0.001" min="0"'}))).join("") || `<span class="sm mut">Add room types in Masters</span>`}</div></div>`).join("");
+  return `<div class="row between"><h1>${isNew ? "New trip" : "Edit trip"}</h1>${!isNew ? tchip(t.status) : ""}</div>
+  <div class="card"><h3>Basics</h3><div class="grid g3">${fld("Title", inp("title", t.title, {ph:"December 2026 Umrah"}))}${fld("Trip code", inp("code", t.code, {ph:"UMR-2026-12"}))}${fld("Status", sel("status", t.status, Object.entries(TSTATUS).map(([k,v]) => [k, v[0]]), {blank:false}))}
+  ${fld("Start date", inp("startDate", t.startDate, {type:"date", rr:true}))}${fld("End date", inp("endDate", t.endDate, {type:"date", rr:true}))}${fld("Max seats", inp("maxSeats", t.maxSeats, {type:"number", attrs:'min="1"'}))}
+  ${fld("Registration opens", inp("regOpen", t.regOpen, {type:"date"}))}${fld("Registration closes", inp("regClose", t.regClose, {type:"date"}))}${fld("Ameer", sel("ameerId", t.ameerId, staffOpts))}
+  ${fld("Travel mode", sel("mode", t.mode, [["bus","Bus"],["flight","Flight"]], {blank:false, rr:true}))}${fld(t.mode === "flight" ? "Airline" : "Bus operator", sel("transportId", t.transportId, opts(m.transport.filter(x => !x.kind || x.kind === (t.mode === "flight" ? "airline" : "bus")))))}${fld("Departure point", inp("departure", t.departure))}</div>
+  ${t.startDate ? `<p class="sm mut" style="margin:10px 0 0">Ages are calculated on ${fmtD(addDays(t.startDate,1))}. Passports must be valid till ${fmtD(addMonths(t.startDate, settings().passportMonths))}; residence cards till ${fmtD(addMonths(t.startDate, settings().residenceMonths))}.</p>` : ""}</div>
+  <div class="card"><div class="row between"><h3>Stay plan</h3>${btn("+ Add stay","addLeg","","s")}</div>${legs || `<p class="sm mut">No stays added.</p>`}</div>
+  <div class="card"><div class="row between"><h3>Pricing</h3>${btn("Copy pricing from last " + (t.mode === "flight" ? "flight" : "bus") + " trip","copyPricing","","s")}</div>
+    <div class="grid g3">${fld("Adult fare (5 yrs+)", inp("fares.adult", t.fares.adult, {type:"number", rr:true, attrs:'step="0.001" min="0"'}))}${fld(`Child fare (${settings().infantMaxAge}–under ${settings().childMaxAge})`, inp("fares.child", t.fares.child, {type:"number", attrs:'step="0.001" min="0"'}))}${fld(`Infant fare (under ${settings().infantMaxAge})`, inp("fares.infant", t.fares.infant, {type:"number", attrs:'step="0.001" min="0"'}))}</div>
+    <h3 style="margin-top:14px">Visa fees (per person)</h3><div class="grid g3">${DEFAULT_VISA.map(v => fld(esc(v.name), inp(`visaFees.${v.id}`, (t.visaFees||{})[v.id], {type:"number", attrs:'step="0.001" min="0"'}))).join("")}</div>
+    <h3 style="margin-top:14px">Special room rates</h3><div class="grid g2">${rates}</div></div>
+  <div class="card">${fld("Notes for pilgrims", `<textarea data-bind="notes" rows="3">${esc(t.notes||"")}</textarea>`)}</div>
+  <div class="stick">${!isNew && can("trips") ? btn("Delete trip","delTrip",t.id,"d") : ""}${btn("Cancel","nav","trips")}${btn("Save trip","saveTrip","","p")}</div>`;
+};
+
+/* ================= BOOKINGS LIST ================= */
+VIEWS.bookings = () => {
+  if (!view.draft) view.draft = {tripId: defaultTripId(), status:"", q:""};
+  const f = view.draft, ts = visibleTrips();
+  let list = allBookings().filter(b => ts.some(t => t.id === b.tripId));
+  if (f.tripId) list = list.filter(b => b.tripId === f.tripId);
+  if (f.status) list = list.filter(b => f.status === "pending" ? ["submitted","review"].includes(b.status) : f.status === "pipe" ? PIPE.includes(b.status) : b.status === f.status);
+  if (f.q){ const q = f.q.toLowerCase(); list = list.filter(b => leadName(b).toLowerCase().includes(q) || b.accountMobile.includes(q.replace(/\D/g,"") || "~") || (b.passengers||[]).some(bp => { const p = D().profiles[bp.profileId] || {}; return (p.name||"").toLowerCase().includes(q) || (p.passportNo||"").toLowerCase().includes(q); })); }
+  list.sort((a,b) => (b.submittedAt || b.createdAt || "").localeCompare(a.submittedAt || a.createdAt || ""));
+  const rows = list.map(b => { const t = trip(b.tripId) || {}, c = calc(b), errs = bookingErrors(b, {staff:true}), cats = {Adult:0, Child:0, Infant:0};
+    (b.passengers||[]).forEach(bp => { const e = evalPax(D().profiles[bp.profileId], t, bp); if (cats[e.cat] != null) cats[e.cat]++; });
+    return `<tr class="click" data-act="openBooking" data-arg="${b.id}"><td><b>${esc(leadName(b))}</b><div class="sm mut">${showMobile(b.accountMobile)}</div></td><td>${b.type === "bachelor" ? "Bachelor" : "Family"}<div class="sm mut">${(b.passengers||[]).length ? `${cats.Adult}A ${cats.Child}C ${cats.Infant}I` : b.requested ? `Requested ${num(b.requested.adults)}A ${num(b.requested.children)}C ${num(b.requested.infants)}I` : ""}</div></td>
+    <td>${bchip(b.status)}${errs.length && !PIPE.includes(b.status) ? `<div style="margin-top:3px">${chip(errs.length + " issue(s)","red")}</div>` : ""}${(b.requests||[]).some(r => r.status !== "done") ? `<div style="margin-top:3px">${chip("room request","gold")}</div>` : ""}</td>
+    <td class="r">${money(Math.max(0,c.balPre))}${c.pendingCount ? `<div>${chip(c.pendingCount + " to verify","amber")}</div>` : ""}</td></tr>`; }).join("");
+  return `<div class="row between"><h1>Bookings</h1>${can("newBooking") ? btn("+ New booking","nav","newBooking","p") : ""}</div>
+  <div class="card tight grid g3">${fld("Trip", sel("tripId", f.tripId, ts.map(t => [t.id, t.title]), {rr:true, blankLabel:"All trips"}))}${fld("Status", sel("status", f.status, [["pipe","New requests & details pending"],["pending","Awaiting approval"], ...Object.entries(BSTATUS).map(([k,v]) => [k, v[0]])], {rr:true, blankLabel:"All statuses"}))}${fld("Search (name, passport, mobile)", inp("q", f.q, {rr:true, ph:"Type and press Enter"}))}</div>
+  <div class="tw"><table><thead><tr><th>Lead</th><th>Type</th><th>Status</th><th class="r">Pre-trip balance</th></tr></thead><tbody>${rows || `<tr><td colspan="4" class="empty">No bookings match.</td></tr>`}</tbody></table></div>`;
+};
+VIEWS.newBooking = () => {
+  if (!view.draft) view.draft = {tripId: defaultTripId(), mobile:""};
+  const f = view.draft;
+  return `<h1>New booking (office)</h1><p class="mut sm">For walk-in or phone registrations. If the mobile is new, an account is created – the pilgrim sets their own PIN on first login.</p>
+  <div class="card grid g2">${fld("Trip", sel("tripId", f.tripId, visibleTrips().filter(t => !["completed","cancelled"].includes(t.status)).map(t => [t.id, t.title])))}${fld("Lead pilgrim's mobile", inp("mobile", f.mobile, {ph:"9123 4567", attrs:'inputmode="tel"'}))}</div>
+  <div class="stick">${btn("Cancel","nav","bookings")}${btn("Continue","staffStartBooking","","p")}</div>`;
+};
+
+/* ================= PILGRIM DIRECTORY ================= */
+VIEWS.pilgrims = () => {
+  if (!view.draft) view.draft = {q:""};
+  const q = (view.draft.q||"").toLowerCase();
+  let list = Object.entries(D().profiles).map(([id,p]) => ({...p, id}));
+  if (q) list = list.filter(p => (p.name||"").toLowerCase().includes(q) || (p.passportNo||"").toLowerCase().includes(q) || (p.mobile||"").includes(q));
+  list.sort((a,b) => (a.name||"").localeCompare(b.name||""));
+  const tripsOf = id => allBookings().filter(b => (b.passengers||[]).some(bp => bp.profileId === id) && ACTIVE.includes(b.status)).length;
+  return `<h1>Pilgrims</h1><div class="card tight">${fld("Search name, passport or mobile", inp("q", view.draft.q, {rr:true, ph:"Type and press Enter"}))}</div>
+  <div class="tw"><table><thead><tr><th>Name</th><th>Passport</th><th>Residence</th><th>Region / Unit</th><th>Trips</th><th></th></tr></thead><tbody>${list.slice(0,300).map(p => `<tr><td><b>${esc(p.name)}</b><div class="sm mut">${p.gender||""} · DOB ${fmtD(p.dob)}</div></td><td>${esc(p.passportNo||"—")}<div class="sm mut">exp ${fmtD(p.passportExpiry)}</div></td><td>${p.onVisitVisa ? "Visit visa" : "exp " + fmtD(p.residenceExpiry)}</td><td class="sm">${esc(mName("regions",p.regionId))}<div class="mut">${esc(mName("units",p.unitId))}</div></td><td>${tripsOf(p.id)}</td><td>${btn("Edit","editPerson",p.id+"||view","s")}</td></tr>`).join("") || `<tr><td colspan="6" class="empty">No pilgrims found.</td></tr>`}</tbody></table></div>`;
+};
+
+/* ================= REPORTS ================= */
+function reportData(tid, tab){
+  const t = trip(tid); if (!t) return {head:[], rows:[]};
+  const bs = bookingsOf(tid).filter(b => ACTIVE.includes(b.status) && b.status !== "travelled" || b.status === "travelled");
+  if (tab === "payments"){
+    const head = ["Lead","Mobile","Status","Due before trip","Paid (verified)","Balance before trip","On-trip charges","On-trip paid","On-trip balance","Pending verification"];
+    return {head, rows: bs.map(b => { const c = calc(b); return [leadName(b), showMobile(b.accountMobile), BSTATUS[b.status][0], c.pre.toFixed(3), c.paidPre.toFixed(3), c.balPre.toFixed(3), c.on.toFixed(3), c.paidOn.toFixed(3), c.balOn.toFixed(3), c.pendingAmt.toFixed(3)]; }), money:[3,4,5,6,7,8,9]};
+  }
+  if (tab === "requests"){
+    const rs = bookingsOf(tid).filter(b => PIPE.includes(b.status)).sort((a,b) => (a.createdAt||"").localeCompare(b.createdAt||""));
+    return {head:["Name","Mobile","Type","Adults","Children","Infants","Status","Requested on","Remarks"], rows: rs.map(b => [leadName(b), showMobile(b.accountMobile), b.type === "bachelor" ? "Bachelor" : "Family", num((b.requested||{}).adults), num((b.requested||{}).children), num((b.requested||{}).infants), BSTATUS[b.status][0], fmtD((b.createdAt||"").slice(0,10)), b.remarks || ""])};
+  }
+  if (tab === "summary"){
+    const agg = {};
+    bs.forEach(b => (b.passengers||[]).forEach(bp => { const p = D().profiles[bp.profileId] || {}, e = evalPax(p, t, bp), k = mName("regions",p.regionId) + " / " + mName("divisions",p.divisionId) + " / " + mName("units",p.unitId); agg[k] = agg[k] || {Adult:0, Child:0, Infant:0, Total:0}; if (agg[k][e.cat] != null) agg[k][e.cat]++; agg[k].Total++; }));
+    return {head:["Region / Division / Unit","Adults","Children","Infants","Total"], rows: Object.entries(agg).sort().map(([k,v]) => [k, v.Adult, v.Child, v.Infant, v.Total])};
+  }
+  if (tab === "rooms"){
+    const rows = []; bs.forEach(b => (b.charges||[]).filter(c => c.type === "special_room").forEach(c => rows.push([leadName(b), c.city, mName("roomTypes", c.roomTypeId), c.nights, c.stage === "on" ? "On-trip" : "Before trip", c.stage === "on" ? (c.settle === "after" ? "After return" : "During trip") : "", num(c.amount).toFixed(3)])));
+    bs.forEach(b => (b.requests||[]).filter(r => r.status !== "done").forEach(r => rows.push([leadName(b), "", "Request: " + r.text, "", "Open request", "", ""])));
+    return {head:["Lead","City","Room","Nights","Due","Settlement","Amount"], rows};
+  }
+  const head = ["#","Name (as per passport)","Gender","DOB","Age","Category","Seat","Passport no","Passport expiry","Residence expiry","Visa","Region","Division","Unit","Lead","Lead mobile","Booking status","Issues"];
+  const rows = []; let n = 0;
+  bs.forEach(b => (b.passengers||[]).forEach(bp => { const p = D().profiles[bp.profileId] || {}, e = evalPax(p, t, bp);
+    if (tab === "visa" && false) return;
+    rows.push([++n, p.name, p.gender||"", p.dob||"", e.age ?? "", e.cat, seatOf(e,bp) ? "Yes" : "No", p.passportNo||"", p.passportExpiry||"", p.onVisitVisa ? "Visit visa" : (p.residenceExpiry||""), visaName(bp.visaType), mName("regions",p.regionId), mName("divisions",p.divisionId), mName("units",p.unitId), leadName(b), showMobile(b.accountMobile), BSTATUS[b.status][0], e.issues.join("; ")]); }));
+  if (tab === "visa"){ rows.sort((a,b) => String(a[10]).localeCompare(String(b[10])) || String(a[1]).localeCompare(String(b[1]))); rows.forEach((r,i) => r[0] = i+1); return {head:["#","Name","DOB","Passport no","Passport expiry","Visa requirement","Lead mobile"], rows: rows.map(r => [r[0], r[1], r[3], r[7], r[8], r[10], r[15]])}; }
+  return {head, rows};
+}
+VIEWS.reports = () => {
+  if (!view.draft) view.draft = {tripId: view.tripId || defaultTripId(), tab:"manifest"};
+  const f = view.draft, tabs = [["requests","New requests"],["manifest","Passenger manifest"],["visa","Visa list"],["payments","Payments"],["rooms","Special rooms"],["summary","By region / unit"]];
+  const r = reportData(f.tripId, f.tab);
+  return `<h1>Reports</h1><div class="card tight row between"><div style="min-width:240px;flex:1">${fld("Trip", sel("tripId", f.tripId, visibleTrips().map(t => [t.id, t.title]), {rr:true, blank:false}))}</div>${btn("Copy as CSV (paste into Excel)","copyCSV","","s")}</div>
+  <div class="tabs">${tabs.map(([k,l]) => `<a class="${f.tab===k?"on":""}" data-act="repTab" data-arg="${k}">${l}</a>`).join("")}</div>
+  <div class="tw"><table><thead><tr>${r.head.map(h => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${r.rows.map(row => `<tr>${row.map(c => `<td>${esc(c)}</td>`).join("")}</tr>`).join("") || `<tr><td colspan="${r.head.length||1}" class="empty">No data</td></tr>`}</tbody></table></div><p class="sm mut">${r.rows.length} row(s). ${f.tab === "requests" ? "Requests not yet submitted with passenger details." : "Cancelled, rejected, draft and request-stage bookings are excluded."}</p>`;
+};
+
+/* ================= MASTERS ================= */
+VIEWS.masters = () => {
+  if (!view.draft) view.draft = {tab:"regions", parent:""};
+  const f = view.draft, def = MASTER_KEYS.find(k => k.key === f.tab), m = masters();
+  let list = m[f.tab];
+  if (def.parent && f.parent) list = list.filter(x => x.parentId === f.parent);
+  const parentName = id => mName(def.parent, id);
+  return `<h1>Masters</h1><div class="tabs">${MASTER_KEYS.map(k => `<a class="${f.tab===k.key?"on":""}" data-act="masterTab" data-arg="${k.key}">${k.label} <span class="mut sm">${m[k.key].length}</span></a>`).join("")}</div>
+  <div class="card tight row between">${def.parent ? `<div style="min-width:220px">${fld("Filter by " + def.parent.slice(0,-1), sel("parent", f.parent, opts(m[def.parent]), {rr:true, blankLabel:"All"}))}</div>` : "<div></div>"}<div class="row">${btn("Bulk add (one per line)","bulkMaster",f.tab,"s")}${btn("+ Add","editMaster",f.tab+"|","s p")}</div></div>
+  <div class="tw"><table><thead><tr>${def.parent ? `<th>${MASTER_KEYS.find(k => k.key === def.parent).label.slice(0,-1)}</th>` : ""}${def.fields.map(x => `<th>${x[1]}</th>`).join("")}<th></th></tr></thead><tbody>
+  ${list.map(x => `<tr>${def.parent ? `<td>${esc(parentName(x.parentId))}</td>` : ""}${def.fields.map(([k]) => `<td>${esc(k === "kind" ? (x[k] === "airline" ? "Airline" : x[k] === "bus" ? "Bus" : "") : x[k])}</td>`).join("")}<td class="r">${btn("Edit","editMaster",f.tab+"|"+x.id,"s")} ${btn("Delete","delMaster",f.tab+"|"+x.id,"s d")}</td></tr>`).join("") || `<tr><td colspan="9" class="empty">Nothing added yet.</td></tr>`}</tbody></table></div>`;
+};
+
+/* ================= SETTINGS ================= */
+VIEWS.settings = () => {
+  if (!view.draft) view.draft = clone(settings());
+  const s = view.draft;
+  const staff = Object.entries(D().staff).map(([id,x]) => `<tr><td><b>${esc(x.name)}</b></td><td>${esc(x.email||"")}<div class="sm mut">${showMobile(x.mobile)}</div></td><td>${ROLES[x.role]}</td><td>${x.active === false ? chip("inactive","red") : chip("active","green")}</td><td class="r">${btn("Edit","editStaff",id,"s")}</td></tr>`).join("");
+  return `<h1>Settings</h1><div class="card"><h3>General</h3><div class="grid g3">${fld("Organisation name", inp("orgName", s.orgName))}${fld("Currency", inp("currency", s.currency))}
+  ${fld("Login OTP", sel("otpMode", s.otpMode, [["off","Off – mobile + 6-digit PIN"],["sms","On – SMS code (needs SMS provider in Supabase)"],["whatsapp","On – WhatsApp code (needs Twilio in Supabase)"]], {blank:false}))}</div>
+  <h3 style="margin-top:14px">Rules</h3><div class="grid g4">${fld("Infant: age under", inp("infantMaxAge", s.infantMaxAge, {type:"number", attrs:'min="0"'}))}${fld("Child: age under", inp("childMaxAge", s.childMaxAge, {type:"number", attrs:'min="1"'}))}${fld("Passport validity (months)", inp("passportMonths", s.passportMonths, {type:"number"}))}${fld("Residence validity (months)", inp("residenceMonths", s.residenceMonths, {type:"number"}))}</div>
+  <p class="sm mut">Age is calculated on trip start date + 1 day. Validity is checked against the trip start date.</p><div class="row" style="justify-content:flex-end">${btn("Save settings","saveSettings","","p")}</div></div>
+  <div class="card"><div class="row between"><h3>Staff users</h3>${btn("+ Add staff","editStaff","","s p")}</div><div class="tw"><table><thead><tr><th>Name</th><th>Login email</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody>${staff}</tbody></table></div></div>`;
+};
+
+/* ================= MODALS ================= */
+function openModal(m){ modal = m; renderModal(); }
+function closeModal(){ modal = null; $("#modal").innerHTML = ""; }
+function renderModal(){ keepState(renderModalNow); }
+function renderModalNow(){ if (!modal){ $("#modal").innerHTML = ""; return; } $("#modal").innerHTML = `<div class="ov"><div class="box ${modal.small ? "sm" : ""}" data-scope="modal">${modal.render()}</div></div>`; }
+function openDialog(html, small = true){ return new Promise(res => { dialog = {res}; $("#dialog").innerHTML = `<div class="ov"><div class="box ${small ? "sm" : ""}">${html}</div></div>`; }); }
+function closeDialog(v){ const d = dialog; dialog = null; $("#dialog").innerHTML = ""; if (d) d.res(v); }
+const confirmBox = (msg, okLabel = "Yes") => openDialog(`<p>${msg}</p><div class="row" style="justify-content:flex-end">${btn("No","dlg","0")}${btn(okLabel,"dlg","1","p")}</div>`).then(v => v === "1");
+function askText(title, label, required){ return openDialog(`<h3>${title}</h3><form data-submit="dlgForm">${fld(label, `<textarea name="v" rows="3" ${required ? "required" : ""}></textarea>`)}<div class="row" style="justify-content:flex-end;margin-top:10px">${btn("Cancel","dlg","")}<button class="btn p">OK</button></div></form>`); }
+
+/* Profile modal */
+function openProfile(profileId, ctx){
+  const p = profileId ? clone(D().profiles[profileId]) : {nationality:"Indian", docs:{}, docStatus:{}};
+  p.docs = p.docs || {}; p.docStatus = p.docStatus || {};
+  openModal({draft:p, ctx, id: profileId || crypto.randomUUID(), render: profileForm});
+}
+function profileForm(){
+  const p = modal.draft, ctx = modal.ctx || {}, m = masters(), t = ctx.tripId && trip(ctx.tripId), e = t ? evalPax(p, t, null) : null;
+  const up = (k, l, req) => { const ref = p.docs[k], s = p.docStatus[k]; return `<div class="upl ${ref ? "has" : ""}"><b>${l}${req ? " *" : ""}</b>${ref ? `<span class="row"><span class="doc" data-act="viewDoc" data-arg="${esc(JSON.stringify(ref))}">View</span>${s ? chip(s, s === "verified" ? "green" : s === "rejected" ? "red" : "amber") : ""}<a class="sm" data-act="clearDoc" data-arg="${k}">Remove</a></span>` : ""}
+    <input type="file" accept="image/*,application/pdf" data-upload="${k}"><span class="sm mut upl-st" id="up-${k}"></span></div>`; };
+  const pil = !isStaff();
+  return `<div class="row between"><h2>${modal.isNew === false || D().profiles[modal.id] ? "Edit person" : "Add person"}</h2>${btn("✕","closeModal","","s")}</div>
+  ${t && e ? `<p class="sm mut">For ${esc(t.title)}: passport valid till ${fmtD(e.passReq)}+, residence card till ${fmtD(e.resReq)}+. ${p.dob ? `Age on ${fmtD(addDays(t.startDate,1))}: <b>${e.age}</b> → ${catChip(e.cat)}` : ""}</p>` : ""}
+  ${ctx.askRel ? `<div class="grid g2" style="margin-bottom:12px">${fld("Relationship to account holder", sel("_rel", p._rel || ctx.rel || "", RELS.filter(r => r !== "Self" || ctx.allowSelf).map(r => [r,r])))}</div>` : ""}
+  <div class="grid g2">${fld("Full name (as per passport) *", inp("name", p.name, {attrs:'autocomplete="off" style="text-transform:uppercase"'}))}${fld("Gender *", sel("gender", p.gender, [["Male","Male"],["Female","Female"]]))}
+  ${fld("Date of birth *", inp("dob", p.dob, {type:"date", rr:true, attrs:`min="1900-01-01" max="${today()}"`}))}${fld("Nationality", `<input value="Indian" disabled>`)}
+  ${fld("Passport number *", inp("passportNo", p.passportNo, {attrs:'style="text-transform:uppercase"'}))}${fld("Place of issue", inp("passportPlace", p.passportPlace))}
+  ${fld("Passport issue date", inp("passportIssue", p.passportIssue, {type:"date"}))}${fld("Passport expiry *", inp("passportExpiry", p.passportExpiry, {type:"date", rr:true}))}</div>
+  <div style="margin:12px 0">${chk("onVisitVisa", p.onVisitVisa, "Currently in Oman on a <b>visit visa</b> (no residence card)", {rr:true})}</div>
+  ${p.onVisitVisa ? "" : `<div class="grid g2">${fld("Residence card number *", inp("residenceNo", p.residenceNo))}${fld("Residence card expiry *", inp("residenceExpiry", p.residenceExpiry, {type:"date", rr:true}))}</div>`}
+  <div class="grid g3" style="margin-top:12px">${fld("Region", sel("regionId", p.regionId, opts(m.regions), {rr:true}))}${fld("Division", sel("divisionId", p.divisionId, opts(m.divisions.filter(x => !p.regionId || x.parentId === p.regionId)), {rr:true}))}${fld("Unit", sel("unitId", p.unitId, opts(m.units.filter(x => !p.divisionId || x.parentId === p.divisionId))))}</div>
+  <div class="grid g2" style="margin-top:12px">${fld("Own mobile (optional)", inp("mobile", p.mobile, {attrs:'inputmode="tel"'}))}${fld("Emergency contact", inp("emergency", p.emergency, {ph:"Name & number"}))}</div>
+  <h3 style="margin-top:16px">Documents</h3><p class="sm mut" style="margin-top:-4px">Clear photo or PDF of each side. You can save now and upload later – fields marked * are needed before the booking can be submitted for approval.</p>
+  <div class="grid g2">${up("passportFront","Passport – front",true)}${up("passportBack","Passport – back",true)}${p.onVisitVisa ? "" : up("residenceFront","Residence card – front",true) + up("residenceBack","Residence card – back",true)}${up("visa","Visa page / copy (if you already have a visa)",false)}</div>
+  ${e && e.issues.filter(x => !x.startsWith("Visa requirement")).length ? `<div class="issues" style="margin-top:12px"><ul>${e.issues.filter(x => !x.startsWith("Visa requirement")).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
+  <div class="row" style="justify-content:flex-end;margin-top:14px">${btn("Cancel","closeModal")}${btn("Save","saveProfile","","p")}</div>`;
+}
+async function handleUpload(el){
+  const f = el.files && el.files[0]; if (!f || !modal) return; const k = el.dataset.upload, st = $("#up-" + k);
+  if (st) st.textContent = "Uploading…"; el.disabled = true;
+  try { const ref = await uploadFile(f); if (modal.receipt){ modal.draft.receipt = ref; } else { modal.draft.docs[k] = ref; modal.draft.docStatus[k] = "pending"; } renderModal(); toast("Uploaded"); }
+  catch(e){ if (st) st.textContent = ""; el.disabled = false; toast(e.message || "Upload failed", "err"); }
+}
+
+/* Charge modal */
+function chargeForm(){
+  const c = modal.draft, b = getBooking(modal.bookingId), t = trip(b.tripId), m = masters();
+  const rate = num(((t.roomRates||{})[c.city]||{})[c.roomTypeId]);
+  return `<div class="row between"><h2>Add charge</h2>${btn("✕","closeModal","","s")}</div><div class="grid g2">
+  ${fld("Type", sel("type", c.type, [["special_room","Special room"],["other","Other charge"],["discount","Discount / waiver"]], {blank:false, rr:true}))}
+  ${fld("Due", sel("stage", c.stage, [["pre","Before trip (must be paid before start)"],["on","On-trip (requested in Makkah/Madinah)"]], {blank:false, rr:true}))}
+  ${c.stage === "on" ? fld("Settlement", sel("settle", c.settle, [["during","During the trip (preferred)"],["after","After return"]], {blank:false})) : ""}
+  ${c.type === "special_room" ? fld("City", sel("city", c.city, CITIES.map(x => [x,x]), {blank:false, rr:true})) + fld("Room type", sel("roomTypeId", c.roomTypeId, opts(m.roomTypes), {rr:true})) + fld("Nights", inp("nights", c.nights, {type:"number", rr:true, attrs:'min="1"'})) : fld("Description", inp("label", c.label))}
+  ${fld("Amount" + (c.type === "special_room" && rate ? ` (rate ${money(rate)} × ${num(c.nights)} = ${money(rate*num(c.nights))})` : ""), inp("amount", c.amount, {type:"number", attrs:'step="0.001" min="0"'}))}</div>
+  ${c.type === "special_room" && rate && !c._touched ? `<p class="sm">${btn("Use rate","useRate",String(rate*num(c.nights)),"s")}</p>` : ""}
+  <div style="margin-top:10px">${fld("Note", inp("note", c.note))}</div>
+  <div class="row" style="justify-content:flex-end;margin-top:14px">${btn("Cancel","closeModal")}${btn("Add charge","saveCharge","","p")}</div>`;
+}
+/* Payment modal */
+function paymentForm(){
+  const p = modal.draft, staff = isStaff(), b = getBooking(modal.bookingId), c = calc(b);
+  return `<div class="row between"><h2>${staff ? "Record payment" : "Upload payment slip"}</h2>${btn("✕","closeModal","","s")}</div>
+  <p class="sm mut">Balance before trip: <b>${money(c.balPre)}</b>${c.balOn > 0.0005 ? ` · On-trip balance: <b>${money(c.balOn)}</b>` : ""}. Instalments are fine – full pre-trip amount must be paid before the trip starts.</p>
+  <div class="grid g2">${fld("Amount *", inp("amount", p.amount, {type:"number", attrs:'step="0.001" min="0"'}))}${fld("Paid on *", inp("date", p.date, {type:"date"}))}
+  ${fld("Method", sel("method", p.method, [["transfer","Bank transfer"],["cash","Cash by hand"]], {blank:false, rr:true}))}${fld("For", sel("stage", p.stage, [["pre","Trip charges (before trip)"],["on","On-trip charges"]], {blank:false}))}
+  ${fld(p.method === "cash" ? "Received by / reference" : "Transfer reference", inp("ref", p.ref))}</div>
+  <div class="upl ${p.receipt ? "has" : ""}" style="margin-top:12px"><b>Receipt slip${p.method === "transfer" && !staff ? " *" : ""}</b>${p.receipt ? `<span class="doc" data-act="viewDoc" data-arg="${esc(JSON.stringify(p.receipt))}">View receipt</span>` : ""}<input type="file" accept="image/*,application/pdf" data-upload="receipt"><span class="sm mut" id="up-receipt"></span></div>
+  ${!can("verifyPay") ? `<p class="sm mut">The payment will show as <b>pending</b> until Finance verifies it.</p>` : ""}
+  <div class="row" style="justify-content:flex-end;margin-top:14px">${btn("Cancel","closeModal")}${btn("Save payment","savePayment","","p")}</div>`;
+}
+/* Master modal */
+function masterForm(){
+  const x = modal.draft, def = MASTER_KEYS.find(k => k.key === modal.key), m = masters();
+  return `<div class="row between"><h2>${modal.isNew ? "Add" : "Edit"} ${def.label.slice(0,-1).toLowerCase()}</h2>${btn("✕","closeModal","","s")}</div><div class="grid g2">
+  ${def.parent ? fld(MASTER_KEYS.find(k => k.key === def.parent).label.slice(0,-1) + " *", sel("parentId", x.parentId, opts(m[def.parent]))) : ""}
+  ${def.fields.map(([k,l,ty]) => fld(l, ty === "city" ? sel(k, x[k], CITIES.map(c => [c,c])) : ty === "kind" ? sel(k, x[k], [["bus","Bus"],["airline","Airline"]]) : inp(k, x[k], ty === "num" ? {type:"number"} : {}))).join("")}</div>
+  <div class="row" style="justify-content:flex-end;margin-top:14px">${btn("Cancel","closeModal")}${btn("Save","saveMaster","","p")}</div>`;
+}
+function bulkForm(){
+  const def = MASTER_KEYS.find(k => k.key === modal.key), m = masters();
+  return `<div class="row between"><h2>Bulk add ${def.label.toLowerCase()}</h2>${btn("✕","closeModal","","s")}</div>
+  ${def.parent ? fld(MASTER_KEYS.find(k => k.key === def.parent).label.slice(0,-1) + " *", sel("parentId", modal.draft.parentId, opts(m[def.parent]))) : ""}
+  <div style="margin-top:10px">${fld("Names – one per line", `<textarea data-bind="text" rows="10">${esc(modal.draft.text||"")}</textarea>`)}</div>
+  <div class="row" style="justify-content:flex-end;margin-top:14px">${btn("Cancel","closeModal")}${btn("Add all","saveBulk","","p")}</div>`;
+}
+function staffForm(){
+  const s = modal.draft;
+  return `<div class="row between"><h2>${modal.isNew ? "Add" : "Edit"} staff</h2>${btn("✕","closeModal","","s")}</div>
+  ${modal.isNew ? `<div class="note">First create the login in <b>Supabase → Authentication → Users → Add user</b> (email + password, "Auto confirm" ticked). Then add the same email here with the role.</div>` : ""}
+  <div class="grid g2">${fld("Name *", inp("name", s.name))}${fld("Login email *", inp("email", s.email, {type:"email", attrs: modal.isNew ? "" : "disabled"}))}${fld("Mobile", inp("mobile", s.mobile, {attrs:'inputmode="tel"'}))}${fld("Role", sel("role", s.role, Object.entries(ROLES), {blank:false}))}</div>
+  <div style="margin-top:10px">${chk("active", s.active !== false, "Active")}</div>
+  <div class="row" style="justify-content:flex-end;margin-top:14px">${btn("Cancel","closeModal")}${btn("Save","saveStaff","","p")}</div>`;
+}
+function fareForm(){
+  const f = modal.draft, s = modal.std;
+  return `<div class="row between"><h2>Adjust fare</h2>${btn("✕","closeModal","","s")}</div>
+  <p class="sm"><b>${esc(s.name)}</b> · ${s.cat}<br><span class="mut">Standard fare ${money(s.fare)} · ${esc(s.visaName)} ${money(s.visa)}</span></p>
+  <div class="grid g2">${fld("Fare to charge", inp("fare", f.fare, {type:"number", ph:"Standard: " + s.fare.toFixed(3), attrs:'step="0.001" min="0"'}))}${fld("Visa fee to charge", inp("visa", f.visa, {type:"number", ph:"Standard: " + s.visa.toFixed(3), attrs:'step="0.001" min="0"'}))}</div>
+  <p class="sm mut">Leave a box empty to keep the standard amount. Enter 0 to waive.</p>
+  ${fld("Reason *", inp("note", f.note, {ph:"e.g. Needy family – approved by committee"}))}
+  <div class="row" style="justify-content:flex-end;margin-top:14px">${btn("Reset to standard","saveFare","reset","d")}${btn("Cancel","closeModal")}${btn("Save","saveFare","","p")}</div>`;
+}
+function linkForm(){
+  return `<div class="row between"><h2>Link an existing person</h2>${btn("✕","closeModal","","s")}</div>
+  <p class="sm mut">If this person has travelled with us before (for example under another family member's mobile), enter their passport number and date of birth to add them to your list.</p>
+  <div class="grid g2">${fld("Passport number", inp("passportNo", modal.draft.passportNo, {attrs:'style="text-transform:uppercase"'}))}${fld("Date of birth", inp("dob", modal.draft.dob, {type:"date"}))}${fld("Relationship", sel("rel", modal.draft.rel, RELS.filter(r => r !== "Self").map(r => [r,r])))}</div>
+  <div class="row" style="justify-content:flex-end;margin-top:14px">${btn("Cancel","closeModal")}${btn("Find & link","doLink","","p")}</div>`;
+}
+
+/* ================= ACTIONS ================= */
+const pilgrimEmail = m => `${m}@${settings().pilgrimDomain}`;
+const pinOk = p => /^\d{6}$/.test(p);
+async function afterLogin(){ busy(true); try { await resolveSession(); await loadAll(); } catch(e){ toast(e.message, "err"); } finally { busy(false); } view = {name:"home"}; render(); }
+const personPayload = p => ({name:p.name, gender:p.gender, dob:nul(p.dob), passport_no:nul(p.passportNo), passport_place:nul(p.passportPlace), passport_issue:nul(p.passportIssue),
+  passport_expiry:nul(p.passportExpiry), on_visit_visa:!!p.onVisitVisa, residence_no: p.onVisitVisa ? null : nul(p.residenceNo), residence_expiry: p.onVisitVisa ? null : nul(p.residenceExpiry),
+  region_id:nul(p.regionId), division_id:nul(p.divisionId), unit_id:nul(p.unitId), mobile:nul(p.mobile), emergency:nul(p.emergency)});
+const MASTER_TABLE = {regions:"regions", divisions:"divisions", units:"units", hotels:"hotels", food:"food_suppliers", transport:"transport_providers", roomTypes:"room_types"};
+function masterRow(key, x){
+  const r = {id:x.id, name:(x.name||"").trim()};
+  if (key === "divisions") r.region_id = x.parentId; if (key === "units") r.division_id = x.parentId;
+  if (key === "hotels"){ r.city = nul(x.city); r.distance = nul(x.distance); r.contact = nul(x.contact); }
+  if (key === "food"){ r.city = nul(x.city); r.meal_plan = nul(x.plan); r.contact = nul(x.contact); }
+  if (key === "transport"){ r.kind = nul(x.kind); r.contact = nul(x.contact); }
+  if (key === "roomTypes") r.capacity = x.capacity == null || x.capacity === "" ? null : num(x.capacity);
+  return r;
+}
+const A = {
+  nav(k){ closeModal(); go(k); },
+  refresh(){ refresh(); },
+  async logout(){ await sb.auth.signOut(); session = null; DB.user = null; DB.staffId = null; DB.hist = {}; login = {tab:"pilgrim", step:"mobile", mobile:"", isNew:false, otpSent:false}; closeModal(); busy(true); try { await loadAll(); } catch(e){} busy(false); go("home"); },
+  loginTab(k){ login.tab = k; render(); },
+  loginBack(){ login.step = "mobile"; login.otpSent = false; render(); },
+  pinMode(k){ login.isNew = k === "new"; render(); },
+  pilMobile(form){ const m = normMobile(fv(form,"mobile")); if (m.length < 8) return toast("Enter a valid mobile number","err"); login.mobile = m; login.isNew = false; login.step = "auth"; render(); },
+  async pilAuth(form){
+    const m = login.mobile, pin = fv(form,"pin");
+    if (!pinOk(pin)) return toast("PIN must be exactly 6 digits","err");
+    busy(true);
+    try {
+      if (login.isNew){
+        if (pin !== fv(form,"pin2")) return toast("PINs do not match","err");
+        const {data, error} = await sb.auth.signUp({email:pilgrimEmail(m), password:pin});
+        if (error) return toast(/registered/i.test(error.message) ? "This mobile already has a PIN – log in instead, or ask the office to reset it." : error.message, "err");
+        if (!data.session) return toast("Account created but not signed in. In Supabase, turn off 'Confirm email' (see setup guide).", "err");
+      } else {
+        const {error} = await sb.auth.signInWithPassword({email:pilgrimEmail(m), password:pin});
+        if (error) return toast("Wrong PIN – or if this is your first time, tap 'First time? Create a PIN'.", "err");
+      }
+    } finally { busy(false); }
+    await afterLogin();
+  },
+  async sendOtp(){ const st = settings(); busy(true); const {error} = await sb.auth.signInWithOtp({phone:"+" + login.mobile, options:{channel: st.otpMode === "whatsapp" ? "whatsapp" : "sms"}}); busy(false);
+    if (error) return toast(error.message, "err"); login.otpSent = true; toast("Code sent"); render(); },
+  async pilOtp(form){ busy(true); const {error} = await sb.auth.verifyOtp({phone:"+" + login.mobile, token:fv(form,"otp").trim(), type:"sms"}); busy(false);
+    if (error) return toast(error.message, "err"); await afterLogin(); },
+  async staffLogin(form){ busy(true); const {error} = await sb.auth.signInWithPassword({email:fv(form,"email").trim(), password:fv(form,"pw")}); busy(false);
+    if (error) return toast("Wrong email or password","err"); await afterLogin(); },
+  register(tid){ startBooking(tid, me().mobile); },
+  async openBooking(id){ go("booking", {id}); try { await loadHistory(id); render(); } catch(e){} },
+  editBooking(id){ const b = getBooking(id); go("bookingEdit", {isForm:true, draft:clone(b)}); },
+  cancelEdit(id){ if (D().bookings[id]) A.openBooking(id); else go(isStaff() ? "bookings" : "home"); },
+  addPax(arg){ const [pid, rel] = arg.split("|"); view.draft.passengers.push({profileId:pid, relationship:rel || "Relative", visaType:"", seatRequired:false}); render(); },
+  removePax(i){ view.draft.passengers.splice(Number(i), 1); render(); },
+  async saveBooking(mode){
+    const d = clone(view.draft), staff = isStaff(), prev = D().bookings[d.id], submit = mode === "submit";
+    const errs = bookingErrors(d, {staff});
+    if (submit && errs.length){ view.showErrs = true; render(); toast(errs[0], "err"); setTimeout(() => { const el = document.querySelector(".issues"); if (el && el.scrollIntoView) el.scrollIntoView({behavior:"smooth", block:"center"}); }, 50); return; }
+    if (!d.passengers.length && !submit) return toast("Add at least one passenger","err");
+    const ok = await save(async () => {
+      if (prev) await q(sb.from("bookings").update({type:d.type, lead_name:nul(d.leadName)}).eq("id", d.id));
+      const keep = new Set(d.passengers.filter(p => p.rowId).map(p => p.rowId));
+      for (const p of (prev ? prev.passengers : [])) if (!keep.has(p.rowId)) await q(sb.from("booking_passengers").delete().eq("id", p.rowId));
+      let i = 0;
+      for (const p of d.passengers){
+        const row = {relationship:p.relationship, visa_type:nul(p.visaType), seat_required:!!p.seatRequired, sort:i++};
+        if (p.rowId) await q(sb.from("booking_passengers").update(row).eq("id", p.rowId));
+        else await q(sb.from("booking_passengers").insert({...row, booking_id:d.id, person_id:p.profileId}));
+      }
+      if (submit) await q(sb.rpc("submit_booking", {p_booking:d.id}));
+    }, submit ? "Submitted" : "Saved");
+    if (ok) A.openBooking(d.id);
+  },
+  editPerson(arg){
+    const [pid, rel, from] = String(arg).split("|"), u = me(), isNew = pid === "new";
+    const mobile = view.name === "bookingEdit" ? view.draft.accountMobile : (u.kind === "pilgrim" ? u.mobile : null);
+    const a = mobile && D().accounts[mobile];
+    const ctx = {tripId: view.name === "bookingEdit" ? view.draft.tripId : (view.name === "booking" ? (getBooking(view.id)||{}).tripId : null), mobile, from, askRel: !!mobile && (isNew || rel !== "Self"), allowSelf: !!mobile && (!a || !a.ownProfileId || rel === "Self"), rel: rel || ""};
+    if (isNew && rel === "Self") ctx.askRel = false;
+    openProfile(isNew ? null : pid, ctx); if (isNew) { modal.isNew = true; if (rel === "Self") modal.draft._rel = "Self"; }
+  },
+  async saveProfile(){
+    const p = clone(modal.draft), ctx = modal.ctx || {}, id = modal.id, errs = [], orig = D().profiles[id] || {docs:{}};
+    p.name = (p.name||"").trim().toUpperCase(); p.passportNo = (p.passportNo||"").trim().toUpperCase();
+    if (!p.name) errs.push("name"); if (!p.gender) errs.push("gender"); if (!p.dob) errs.push("date of birth");
+    if (p.dob && (p.dob > today() || p.dob < "1900-01-01")) errs.push("a valid date of birth");
+    ["passportExpiry","passportIssue","residenceExpiry"].forEach(k => { if (p[k] && (p[k] < "1950-01-01" || p[k] > "2100-12-31")) errs.push("a valid " + {passportExpiry:"passport expiry", passportIssue:"passport issue date", residenceExpiry:"residence expiry"}[k]); });
+    const rel = p._rel || (ctx.rel === "Self" ? "Self" : ctx.rel); delete p._rel;
+    if (ctx.askRel && !rel) errs.push("relationship");
+    if (errs.length) return toast("Please provide: " + errs.join(", "), "err");
+    const wasNew = !!modal.isNew;
+    const ok = await save(async () => {
+      const pid = await q(sb.rpc("save_person", {p_id:id, p:personPayload(p), p_account: ctx.mobile || null, p_relationship: (ctx.mobile && rel) ? rel : null}));
+      for (const [k] of DOCS){
+        const now = p.docs[k], was = (orig.docs||{})[k];
+        if (now && (!was || was.path !== now.path)) await q(sb.from("person_documents").upsert({person_id:pid, doc_type:k, storage_path:now.path, file_name:now.name, content_type:now.type}, {onConflict:"person_id,doc_type"}));
+        if (!now && was) await q(sb.from("person_documents").delete().eq("person_id", pid).eq("doc_type", k));
+      }
+    }, "Saved");
+    if (!ok) return;
+    closeModal();
+    if (view.name === "bookingEdit"){ if (wasNew && !view.draft.passengers.some(x => x.profileId === id)) view.draft.passengers.push({profileId:id, relationship:rel || "Relative", visaType:"", seatRequired:false}); else view.draft.passengers = view.draft.passengers.map(x => x.profileId === id && rel ? {...x, relationship:rel} : x); }
+    render();
+  },
+  editEnquiry(id){ go("enquiry", {isForm:true, draft:clone(getBooking(id))}); },
+  async saveEnquiry(){
+    const d = clone(view.draft), t = trip(d.tripId), prev = D().bookings[d.id], r = d.requested;
+    d.leadName = (d.leadName||"").trim(); ["adults","children","infants"].forEach(k => r[k] = Math.max(0, Math.floor(num(r[k]))));
+    if (!d.leadName) return toast("Please enter your name","err");
+    if (r.adults + r.children + r.infants < 1) return toast("Enter how many people are travelling","err");
+    if (r.adults < 1) return toast("At least one adult must travel","err");
+    if (!isStaff() && !prev && !regOpen(t)) return toast("Registration for this trip is not open","err");
+    const row = {lead_name:d.leadName, type:d.type, req_adults:r.adults, req_children:r.children, req_infants:r.infants, remarks:nul(d.remarks)};
+    const ok = await save(async () => {
+      if (prev){ await q(sb.from("bookings").update(row).eq("id", d.id)); await q(sb.from("booking_history").insert({booking_id:d.id, text:`Request updated: ${reqText(r)}`})); }
+      else await q(sb.from("bookings").insert({...row, id:d.id, trip_id:d.tripId, account_mobile:d.accountMobile}));
+    }, prev ? "Saved" : "Request sent");
+    if (ok) A.openBooking(d.id);
+  },
+  adjFare(i){ const b = getBooking(view.id), bp = b.passengers[Number(i)], t = trip(b.tripId), p = D().profiles[bp.profileId] || {}, e = evalPax(p, t, bp);
+    openModal({small:true, idx:Number(i), draft:{fare: bp.fareOverride, visa: bp.visaOverride, note: bp.fareNote || ""}, std:{fare:num((t.fares||{})[e.cat.toLowerCase()]), visa:num((t.visaFees||{})[bp.visaType]), cat:e.cat, name:p.name, visaName:visaName(bp.visaType)}, render:fareForm}); },
+  async saveFare(reset){
+    const f = modal.draft, b = getBooking(view.id), bp = b.passengers[modal.idx], nm = modal.std.name; let row, text;
+    if (reset === "reset"){ row = {fare_override:null, visa_override:null, fare_note:null}; text = `${nm}: fare reset to standard`; }
+    else {
+      const fare = f.fare === null || f.fare === "" || f.fare === undefined ? null : num(f.fare), visa = f.visa === null || f.visa === "" || f.visa === undefined ? null : num(f.visa);
+      if (fare == null && visa == null) return toast("Enter a fare or visa fee, or use Reset","err");
+      if ((fare != null && fare < 0) || (visa != null && visa < 0)) return toast("Amounts can't be negative","err");
+      if (!(f.note||"").trim()) return toast("Please give a reason","err");
+      row = {fare_override:fare, visa_override:visa, fare_note:f.note.trim()};
+      text = `${nm}: ${fare != null ? `fare ${money(modal.std.fare)} → ${money(fare)}` : ""}${fare != null && visa != null ? ", " : ""}${visa != null ? `visa fee ${money(modal.std.visa)} → ${money(visa)}` : ""} (${row.fare_note})`;
+    }
+    if (await save(async () => { await q(sb.from("booking_passengers").update(row).eq("id", bp.rowId)); await q(sb.from("booking_history").insert({booking_id:b.id, text})); }, "Fare updated")){ closeModal(); render(); }
+  },
+  linkPerson(){ openModal({draft:{passportNo:"", dob:"", rel:""}, small:true, render:linkForm}); },
+  async doLink(){
+    const f = modal.draft, pn = (f.passportNo||"").trim().toUpperCase(); if (!pn || !f.dob || !f.rel) return toast("Fill passport number, date of birth and relationship","err");
+    const mobile = view.name === "bookingEdit" ? view.draft.accountMobile : me().mobile; let found = null;
+    const ok = await save(async () => { const r = await q(sb.rpc("link_person", {p_passport:pn, p_dob:f.dob, p_relationship:f.rel, p_account:mobile})); found = r && r[0]; });
+    if (!ok || !found) return;
+    closeModal(); toast("Linked " + found.name);
+    if (view.name === "bookingEdit" && !view.draft.passengers.some(x => x.profileId === found.id)) view.draft.passengers.push({profileId:found.id, relationship:f.rel, visaType:"", seatRequired:false});
+    render();
+  },
+  clearDoc(k){ delete modal.draft.docs[k]; delete modal.draft.docStatus[k]; renderModal(); },
+  async viewDoc(arg){ let ref; try { ref = JSON.parse(arg); } catch(e){ return; } let url = ""; try { url = await fileUrl(ref); } catch(e){ return toast(e.message, "err"); } if (!url) return toast("File not found","err");
+    const isPdf = /pdf/.test(ref.type || ""); openDialog(`<div class="row between"><b>${esc(ref.name || "Document")}</b>${btn("Close","dlg","")}</div><div style="margin-top:10px">${isPdf ? `<p><a href="${esc(url)}" target="_blank" rel="noopener">Open PDF in a new tab</a></p>` : `<img src="${esc(url)}" alt="document"><p class="sm"><a href="${esc(url)}" target="_blank" rel="noopener">Open full size</a></p>`}</div>`, false); },
+  dlg(v){ closeDialog(v); },
+  dlgForm(form){ closeDialog(fv(form,"v").trim()); },
+  closeModal(){ closeModal(); },
+  async docStatus(arg){ const [pid, k, s] = arg.split("|"); let reason = null;
+    if (s === "rejected"){ reason = await askText("Reject document", "Reason (shown to the pilgrim)", true); if (!reason) return; }
+    if (await save(() => q(sb.from("person_documents").update({status:s, reject_reason:reason}).eq("person_id", pid).eq("doc_type", k)))) render(); },
+  async setStatus(s){
+    const b = getBooking(view.id); let remark = null;
+    if (["correction","rejected","cancelled"].includes(s)){ remark = await askText(BSTATUS[s][0], s === "correction" ? "What needs to be corrected? (shown to the pilgrim)" : "Reason", true); if (!remark) return; }
+    if (s === "approved"){ const errs = bookingErrors(b, {staff:true}); if (errs.length && !(await confirmBox(`There are ${errs.length} open issue(s). Approve anyway?`, "Approve"))) return; }
+    if (s === "confirmed"){ const c = calc(b); if (c.balPre > 0.0005) return toast("Pre-trip balance must be fully paid (" + money(c.balPre) + " outstanding)","err"); }
+    if (await save(() => q(sb.rpc("set_booking_status", {p_booking:b.id, p_status:s, p_remark:remark})), "Status updated")) render();
+  },
+  newRequest(id){ askText("Request special room", "Describe what you need (city, room type, nights, who it's for)", true).then(async txt => { if (!txt) return;
+    if (await save(async () => { await q(sb.from("room_requests").insert({booking_id:id, text:txt})); await q(sb.from("booking_history").insert({booking_id:id, text:"Special room requested"})); }, "Request sent")) render(); }); },
+  async reqDone(rid){ if (await save(() => q(sb.from("room_requests").update({status:"done"}).eq("id", rid)))) render(); },
+  newCharge(id){ const b = getBooking(id), t = trip(b.tripId); openModal({bookingId:id, draft:{type:"special_room", stage: tripStarted(t) || role() === "ameer" ? "on" : "pre", settle:"during", city:"Makkah", roomTypeId:"", nights:1, amount:null, label:"", note:""}, render:chargeForm}); },
+  useRate(v){ modal.draft.amount = Number(v); modal.draft._touched = true; renderModal(); },
+  async saveCharge(){
+    const c = clone(modal.draft); if (!(num(c.amount) > 0)) return toast("Enter an amount","err");
+    if (c.type === "special_room"){ if (!c.roomTypeId) return toast("Choose a room type","err"); c.label = `Special room – ${c.city}, ${mName("roomTypes", c.roomTypeId)}, ${num(c.nights)} night(s)`; }
+    else if (!c.label) c.label = c.type === "discount" ? "Discount" : "Other charge";
+    const row = {booking_id:modal.bookingId, type:c.type, stage:c.stage, settle: c.stage === "on" ? (c.settle || "during") : null, city: c.type === "special_room" ? c.city : null,
+      room_type_id: c.type === "special_room" ? nul(c.roomTypeId) : null, nights: c.type === "special_room" ? Math.max(1, num(c.nights)) : null, amount:num(c.amount), label:c.label, note:nul(c.note)};
+    if (await save(() => q(sb.from("charges").insert(row)), "Charge added")){ closeModal(); render(); }
+  },
+  async delCharge(cid){ if (!(await confirmBox("Remove this charge?"))) return; if (await save(() => q(sb.from("charges").delete().eq("id", cid)))) render(); },
+  newPayment(id){ const b = getBooking(id), t = trip(b.tripId), c = calc(b); openModal({bookingId:id, receipt:true, draft:{amount:null, date:today(), method:"transfer", stage: c.balPre > 0.0005 || !tripStarted(t) ? "pre" : "on", ref:"", receipt:null}, render:paymentForm}); },
+  async savePayment(){
+    const p = clone(modal.draft), staff = isStaff();
+    if (!(num(p.amount) > 0)) return toast("Enter the amount","err"); if (!p.date) return toast("Enter the date","err");
+    if (!staff && p.method === "transfer" && !p.receipt) return toast("Please upload the receipt slip","err");
+    const row = {booking_id:modal.bookingId, stage:p.stage, amount:num(p.amount), method:p.method, paid_on:p.date, reference:nul(p.ref),
+      receipt_path: p.receipt ? p.receipt.path : null, receipt_name: p.receipt ? p.receipt.name : null, receipt_type: p.receipt ? p.receipt.type : null};
+    if (await save(() => q(sb.from("payments").insert(row)), "Payment saved")){ closeModal(); render(); }
+  },
+  async payStatus(arg){ const [pid, s] = arg.split("|"); let reason = null; if (s === "rejected"){ reason = await askText("Reject payment", "Reason (shown to the pilgrim)", true); if (!reason) return; }
+    if (await save(() => q(sb.from("payments").update({status:s, reason}).eq("id", pid)))) render(); },
+  async resetPin(mobile){
+    const pin = await askText("Reset PIN for " + showMobile(mobile), "New 6-digit PIN (tell the pilgrim)", true); if (!pin) return;
+    if (!pinOk(pin)) return toast("PIN must be exactly 6 digits","err");
+    busy(true); const {data, error} = await sb.functions.invoke("reset-pin", {body:{mobile, pin}}); busy(false);
+    if (error || (data && data.error)) return toast((data && data.error) || error.message, "err");
+    toast("PIN reset. Tell the pilgrim the new PIN.");
+  },
+  newTrip(){ go("tripEdit", {isForm:true, draft:blankTrip()}); },
+  editTrip(id){ const t = clone(D().trips[id]); const b = blankTrip(); go("tripEdit", {isForm:true, draft:{...b, ...t, id, legs: t.legs && t.legs.length ? t.legs : b.legs, fares:{...b.fares, ...(t.fares||{})}, visaFees:{...b.visaFees, ...(t.visaFees||{})}, roomRates:{...b.roomRates, ...(t.roomRates||{})}}}); },
+  addLeg(){ const l = view.draft.legs, last = l[l.length-1]; l.push({city: last && last.city === "Makkah" ? "Madinah" : "Makkah", checkIn: last ? last.checkOut : view.draft.startDate, checkOut:"", hotelId:"", foodId:""}); render(); },
+  delLeg(i){ view.draft.legs.splice(Number(i), 1); render(); },
+  copyPricing(){ const t = view.draft, src = visibleTrips().filter(x => x.id !== t.id && x.mode === t.mode)[0]; if (!src) return toast("No earlier " + t.mode + " trip to copy from","err"); t.fares = clone(src.fares) || t.fares; t.visaFees = clone(src.visaFees) || t.visaFees; t.roomRates = clone(src.roomRates) || t.roomRates; toast("Copied pricing from " + src.title); render(); },
+  async saveTrip(){
+    const t = clone(view.draft);
+    if (!t.title) return toast("Enter a title","err"); if (!t.startDate || !t.endDate) return toast("Enter start and end dates","err"); if (t.endDate < t.startDate) return toast("End date is before start date","err");
+    if (!t.code) t.code = "UMR-" + t.startDate.slice(0,7);
+    for (const l of t.legs){ if (l.checkIn && l.checkOut && l.checkOut < l.checkIn) return toast(l.city + ": check-out before check-in","err"); }
+    const numMap = o => Object.fromEntries(Object.entries(o || {}).filter(([,v]) => v !== null && v !== "" && v !== undefined).map(([k,v]) => [k, num(v)]));
+    const row = {id:t.id, code:t.code, title:t.title, mode:t.mode, transport_id:nul(t.transportId), departure:nul(t.departure), ameer_id:nul(t.ameerId),
+      start_date:t.startDate, end_date:t.endDate, reg_open:nul(t.regOpen), reg_close:nul(t.regClose), max_seats: t.maxSeats ? num(t.maxSeats) : null, status:t.status,
+      adult_fare:num(t.fares.adult), child_fare:num(t.fares.child), infant_fare:num(t.fares.infant), visa_fees:numMap(t.visaFees),
+      room_rates:Object.fromEntries(CITIES.map(c => [c, numMap((t.roomRates||{})[c])])), notes:nul(t.notes)};
+    const ok = await save(async () => {
+      await q(sb.from("trips").upsert(row));
+      await q(sb.from("trip_legs").delete().eq("trip_id", t.id));
+      const legs = t.legs.map((l,i) => ({trip_id:t.id, seq:i, city:l.city, check_in:nul(l.checkIn), check_out:nul(l.checkOut), hotel_id:nul(l.hotelId), food_id:nul(l.foodId)}));
+      if (legs.length) await q(sb.from("trip_legs").insert(legs));
+    }, "Trip saved");
+    if (ok) go("trips");
+  },
+  async delTrip(id){ if (bookingsOf(id).length) return toast("This trip has bookings – set its status to Cancelled instead","err"); if (!(await confirmBox("Delete this trip?","Delete"))) return; if (await save(() => q(sb.from("trips").delete().eq("id", id)), "Trip deleted")) go("trips"); },
+  tripPipe(id){ go("bookings", {draft:{tripId:id, status:"pipe", q:""}}); },
+  tripBookings(id){ go("bookings", {draft:{tripId:id, status:"", q:""}}); },
+  tripReports(id){ go("reports", {draft:{tripId:id, tab:"manifest"}}); },
+  async copyLink(id){ const link = location.origin + location.pathname + "#reg-" + id; try { await navigator.clipboard.writeText(link); toast("Registration link copied"); } catch(e){ openDialog(`<h3>Registration link</h3><p class="sm">Copy and share:</p><input class="in" value="${esc(link)}" readonly><div class="row" style="justify-content:flex-end;margin-top:10px">${btn("Close","dlg","")}</div>`); } },
+  async staffStartBooking(){ const f = view.draft, m = normMobile(f.mobile); if (!f.tripId) return toast("Choose a trip","err"); if (m.length < 8) return toast("Enter a valid mobile","err");
+    if (await save(() => q(sb.from("accounts").upsert({mobile:m}, {onConflict:"mobile", ignoreDuplicates:true})))) startBooking(f.tripId, m); },
+  repTab(k){ view.draft.tab = k; render(); },
+  async copyCSV(){ const r = reportData(view.draft.tripId, view.draft.tab); const txt = [r.head, ...r.rows].map(row => row.map(csvCell).join(",")).join("\n"); try { await navigator.clipboard.writeText(txt); toast("Copied " + r.rows.length + " rows – paste into Excel"); } catch(e){ openDialog(`<h3>Copy the data</h3><textarea class="in" rows="10" style="width:100%">${esc(txt)}</textarea><div class="row" style="justify-content:flex-end;margin-top:10px">${btn("Close","dlg","")}</div>`, false); } },
+  masterTab(k){ view.draft = {tab:k, parent:""}; render(); },
+  editMaster(arg){ const [key, id] = arg.split("|"), list = masters()[key]; const x = id ? clone(list.find(y => y.id === id)) : {id:crypto.randomUUID(), parentId: view.draft.parent || ""}; openModal({key, isNew:!id, draft:x, small:true, render:masterForm}); },
+  async saveMaster(){ const x = clone(modal.draft), def = MASTER_KEYS.find(k => k.key === modal.key); if (!(x.name||"").trim()) return toast("Enter a name","err"); if (def.parent && !x.parentId) return toast("Choose the parent","err");
+    if (await save(() => q(sb.from(MASTER_TABLE[modal.key]).upsert(masterRow(modal.key, x))), "Saved")){ closeModal(); render(); } },
+  bulkMaster(key){ openModal({key, draft:{parentId: view.draft.parent || "", text:""}, small:true, render:bulkForm}); },
+  async saveBulk(){ const def = MASTER_KEYS.find(k => k.key === modal.key), f = modal.draft; if (def.parent && !f.parentId) return toast("Choose the parent","err"); const names = [...new Set((f.text||"").split("\n").map(s => s.trim()).filter(Boolean))]; if (!names.length) return toast("Enter at least one name","err");
+    const list = masters()[modal.key]; const rows = names.filter(n => !list.some(y => y.name.toLowerCase() === n.toLowerCase() && (!def.parent || y.parentId === f.parentId))).map(n => masterRow(modal.key, {id:crypto.randomUUID(), name:n, parentId:f.parentId}));
+    if (!rows.length){ closeModal(); return toast("All of these already exist"); }
+    if (await save(() => q(sb.from(MASTER_TABLE[modal.key]).insert(rows)), "Added " + rows.length)){ closeModal(); render(); } },
+  async delMaster(arg){ const [key, id] = arg.split("|"); if (!(await confirmBox("Delete this entry?","Delete"))) return;
+    if (await save(() => q(sb.from(MASTER_TABLE[key]).delete().eq("id", id)))) render(); },
+  async saveSettings(){ const s = clone(view.draft); ["infantMaxAge","childMaxAge","passportMonths","residenceMonths"].forEach(k => s[k] = num(s[k])); if (s.infantMaxAge >= s.childMaxAge) return toast("Infant age must be lower than child age","err");
+    const row = {org_name:s.orgName, currency:s.currency, otp_mode:s.otpMode, infant_max_age:s.infantMaxAge, child_max_age:s.childMaxAge, passport_months:s.passportMonths, residence_months:s.residenceMonths};
+    if (await save(() => q(sb.from("settings").update(row).eq("id", 1)), "Settings saved")){ view.draft = null; render(); } },
+  editStaff(id){ const s = id ? clone(D().staff[id]) : {name:"", email:"", mobile:"", role:"admin", active:true}; openModal({sid:id, isNew:!id, draft:s, small:true, render:staffForm}); },
+  async saveStaff(){ const s = clone(modal.draft); if (!s.name || !s.email) return toast("Name and email are required","err");
+    if (await save(() => q(sb.rpc("upsert_staff", {p_email:s.email.trim(), p_name:s.name.trim(), p_role:s.role, p_mobile: s.mobile ? normMobile(s.mobile) : null, p_active: s.active !== false})), "Saved")){ closeModal(); render(); } }
+};
+/* ================= EVENTS ================= */
+document.addEventListener("click", e => { const el = e.target.closest("[data-act]"); if (!el || el.disabled) return; const f = A[el.dataset.act]; if (f){ e.preventDefault(); f(el.dataset.arg, el, e); } });
+document.addEventListener("submit", e => { const f = e.target.dataset.submit; if (f && A[f]){ e.preventDefault(); A[f](e.target, e); } });
+function onBind(e){
+  const el = e.target;
+  if (el.dataset && el.dataset.upload){ if (e.type === "change") handleUpload(el); return; }
+  const p = el.dataset && el.dataset.bind; if (!p) return;
+  const scope = el.closest("[data-scope]") ? "modal" : "view", tgt = scope === "modal" ? (modal && modal.draft) : view.draft; if (!tgt) return;
+  const v = el.type === "checkbox" ? el.checked : el.type === "number" ? (el.value === "" ? null : Number(el.value)) : el.value;
+  setPath(tgt, p, v);
+  if (scope === "modal" && p === "amount") tgt._touched = true;
+  if (el.dataset.rr === undefined) return;
+  // Date fields: never redraw while the person is still typing – wait until they leave the field
+  if (el.type === "date"){ el.dataset.rrPending = scope; return; }
+  if (e.type === "change"){ if (scope === "modal") renderModal(); else render(); }
+}
+document.addEventListener("input", onBind); document.addEventListener("change", onBind);
+document.addEventListener("focusout", e => { const el = e.target; if (!el.dataset || !el.dataset.rrPending) return; const scope = el.dataset.rrPending; delete el.dataset.rrPending; setTimeout(() => { if (scope === "modal") renderModal(); else if (view.draft) render(); }, 0); });
+/* Keep scroll position and the focused field when the screen redraws */
+function keepState(fn){
+  const ov = document.querySelector("#modal .ov"), ovTop = ov ? ov.scrollTop : 0, y = window.scrollY;
+  const ae = document.activeElement, key = ae && ae.dataset && ae.dataset.bind, inModal = !!(ae && ae.closest && ae.closest("#modal"));
+  fn();
+  const ov2 = document.querySelector("#modal .ov"); if (ov2) ov2.scrollTop = ovTop;
+  if (Math.abs(window.scrollY - y) > 1) window.scrollTo(0, y);
+  if (key){ const el = document.querySelector((inModal ? "#modal " : "#root ") + `[data-bind="${key}"]`); if (el){ try { el.focus({preventScroll:true}); } catch(e){} } }
+}
+window.addEventListener("hashchange", () => { if ((location.hash||"").startsWith("#reg-")){ regTripId = location.hash.slice(5); render(); } });
+
+/* ================= START ================= */
+async function init(){
+  if (!sb){ render(); return; }
+  render();
+  try { await resolveSession(); await loadAll(); } catch(e){ DB.error = "Could not connect to the database: " + e.message; }
+  render();
+  sb.auth.onAuthStateChange(ev => { if (ev === "SIGNED_OUT" && session){ session = null; DB.user = null; DB.staffId = null; render(); } });
+}
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "umrah-trip-manager-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node db-rules.test.mjs && node app-e2e.test.mjs"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.2.17",
+    "jsdom": "^24.1.0"
+  }
+}
